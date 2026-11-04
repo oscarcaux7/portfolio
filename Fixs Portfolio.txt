@@ -1,0 +1,27 @@
+Fixs Portfolio :
+
+- enlever la phrase de vision a cote de Oscar Caux et plutot mettre a la place : Derniere année d'école d'ingé, ESILV x IFT etc, qui soit bien en contrase avec les evenements derrieres, peut être faire les cercles d'evts un peu plus petit 
+
+- mettre en couleur d'accent les petites box "embedded systems" "computer vision" etc 
+
+
+- dans les selected works, ajouter une image pour chaque (dans le menu de selection)
+
+- Pour Camera T-1, expliciter la CHI 2026 submission : j'ai ecris un papier de recherche pour une conference de human computer interaction
+
+- ameliorer la pipeline de Cam T-1 : 1 : When you take a photo 
+  ---> just l'ameliorer tout court (demander a gemini pour les infos)
+  
+ - harmoniser le style pour les deux projects
+ 
+ - ajouter un bouton bien placer en bas de pages pour pouvoir passer au project suivant a tout moment vu qu'il s'agit d'une seule et même page scrollable
+ 
+ -faire la partie user study bien plus petite : faire quand meme comprendre que c'est une user study
+ 
+ -ENLEVER TOUS LES TIRETS
+ 
+ - Pour Raw To Event : rendre tres clair que l'event camera detecte l'enfant avant 
+
+- mieux arranger les photos pour que ce soit plus clair,
+
+- enlever les phrases d'accroches etc

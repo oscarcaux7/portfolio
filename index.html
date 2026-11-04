@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oscar Caux — Creative Technologist</title>
+<meta name="description" content="Oscar Caux — Creative Technologist. Embedded systems, computer vision and HCI. Camera T-1, Raw2Event and browser-native experiments.">
+<meta name="theme-color" content="#F3F0E8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A1917'/%3E%3Crect x='8' y='8' width='7' height='7' fill='%23D6452B'/%3E%3Crect x='17' y='17' width='7' height='7' fill='%232D5BD0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<header class="nav">
+  <a href="#top" class="nav-name" data-snd>Oscar Caux</a>
+  <nav class="nav-links" aria-label="Sections">
+    <a href="#work" data-snd>Work</a>
+    <a href="#lab" data-snd>Lab</a>
+    <a href="#about" data-snd>About</a>
+    <a href="#contact" data-snd>Contact</a>
+  </nav>
+  <div class="nav-tools">
+    <span class="mono nav-clock" title="Local time in Paris"><span id="clock">--:--</span> PAR</span>
+    <button class="chip" id="sound-toggle" aria-pressed="false" data-snd>
+      <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="label">Sound off</span>
+    </button>
+    <button class="chip" id="theme-toggle" aria-pressed="false" data-snd>
+      <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg>
+      <span class="label">Dark</span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <canvas id="hero-dvs" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
+    <div class="hero-top mono">
+      <span>Portfolio — 2026</span>
+      <span>Creative Technologist</span>
+      <span>ESILV × Institute for Future Technologies</span>
+      <span>Paris · La Défense</span>
+    </div>
+
+    <h1 class="display hero-title">
+      <span class="line"><span>Oscar</span></span>
+      <span class="line"><span><em>Caux</em></span></span>
+    </h1>
+
+    <p class="hero-lede">
+      I design technologies that transcend the static image, to reveal the invisible dynamics of reality —
+      <em>from the micro‑movements of the present</em> to <em>the macro‑layers of the past.</em>
+    </p>
+
+    <div class="hero-bottom">
+      <ul class="tags">
+        <li>Embedded systems</li><li>Computer vision</li><li>Human–computer interaction</li><li>Prototyping</li>
+      </ul>
+      <div class="readout mono" aria-live="off">
+        <span class="dot on"></span> ON <span class="dot off"></span> OFF
+        <span class="sep">/</span> simulated event camera <span class="sep">/</span>
+        <span id="hero-rate">0</span> ev/s
+        <span class="hint">— move your cursor</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INDEX ============ -->
+<section id="work" class="section wrap">
+  <div class="section-head">
+    <span class="mono kicker">Index</span>
+    <h2 class="display h2">Selected work</h2>
+    <span class="mono muted">05 projects · 2024—2025</span>
+  </div>
+
+  <ol class="index" id="index">
+    <li><a href="#t1" data-snd data-preview="assets/montage.webp">
+      <span class="i-num mono">01</span>
+      <span class="i-title">Camera T‑1 <em>— tangible geo‑archival exploration</em></span>
+      <span class="i-tag mono">HCI · Hardware</span>
+      <span class="i-stack mono">Raspberry Pi 4 · Python · PCB</span>
+      <span class="i-badge mono">CHI 2026</span>
+    </a></li>
+    <li><a href="#r2e" data-snd data-preview="assets/space_time_cube.webp">
+      <span class="i-num mono">02</span>
+      <span class="i-title">Raw2Event <em>— a 30 € event camera</em></span>
+      <span class="i-tag mono">Research · Vision</span>
+      <span class="i-stack mono">Raspberry Pi 5 · DVS‑Voltmeter</span>
+      <span class="i-badge mono ghost">Research</span>
+    </a></li>
+    <li><a href="#lab-mnist" data-snd data-preview="assets/mnist_img.webp">
+      <span class="i-num mono">03</span>
+      <span class="i-title">TinyGrad MNIST <em>— in‑browser inference</em></span>
+      <span class="i-tag mono">Lab · ML</span>
+      <span class="i-stack mono">TinyGrad · WebGPU</span>
+      <span class="i-badge mono ghost">Live demo</span>
+    </a></li>
+    <li><a href="#lab-rag" data-snd data-preview="assets/synapse.webp">
+      <span class="i-num mono">04</span>
+      <span class="i-title">Synapse <em>— browser‑native RAG engine</em></span>
+      <span class="i-tag mono">Lab · AI</span>
+      <span class="i-stack mono">RAG · local LLM · JS</span>
+      <span class="i-badge mono ghost">Live demo</span>
+    </a></li>
+    <li><a href="#lab-ray" data-snd data-preview="assets/scene2.webp">
+      <span class="i-num mono">05</span>
+      <span class="i-title">Ray‑marching editor <em>— SDF scenes on the GPU</em></span>
+      <span class="i-tag mono">Lab · Graphics</span>
+      <span class="i-stack mono">WebGPU · WGSL · SDF</span>
+      <span class="i-badge mono ghost">Live demo</span>
+    </a></li>
+  </ol>
+  <div class="preview" id="preview" aria-hidden="true"><img alt=""></div>
+</section>
+
+<!-- ============ CHAPTER 01 — CAMERA T-1 ============ -->
+<section id="t1" class="chapter">
+  <div class="wrap">
+    <div class="chapter-head" data-reveal>
+      <span class="mono kicker">Chapter 01 — Breaking the temporal frame</span>
+      <h2 class="display h1">Camera T‑1</h2>
+      <p class="sub">A handheld camera that shows you what this place looked like — right where you're standing.</p>
+    </div>
+
+    <dl class="meta-strip mono" data-reveal>
+      <div><dt>Type</dt><dd>Tangible interface · Lead project</dd></div>
+      <div><dt>With</dt><dd>Thimothée Darmaillacq</dd></div>
+      <div><dt>Year</dt><dd>2025</dd></div>
+      <div><dt>Status</dt><dd><span class="pill">CHI 2026 submission</span></dd></div>
+    </dl>
+  </div>
+
+  <figure class="bleed" data-reveal>
+    <div class="parallax"><img src="assets/montage.webp" alt="Camera T-1 held up in front of the Bourse de Commerce in Paris, its screen showing an archival photograph of the same building" width="1600" height="1200"></div>
+    <figcaption class="wrap mono">Fig. 1 — Bourse de Commerce, Paris. The present in front, the past on screen.</figcaption>
+  </figure>
+
+  <div class="wrap">
+    <div class="grid-2 prose-row">
+      <div data-reveal>
+        <h3 class="mono kicker">The problem</h3>
+        <p class="lead">We experience places as static backdrops, not as human stories. Archives exist, but they sit detached from the streets they document.</p>
+        <ul class="dash">
+          <li>Places read as static, not human</li>
+          <li>A disconnection from past events</li>
+          <li>Less empathy for our environment</li>
+          <li>Archives ignored, far from their real locations</li>
+        </ul>
+      </div>
+      <blockquote class="pull" data-reveal style="--d:.1s">
+        <span class="mono kicker">Research question</span>
+        <p>“Can a tangible device bridge the gap between <em>individual</em> and <em>collective</em> memory?”</p>
+      </blockquote>
+    </div>
+
+    <!-- pipeline -->
+    <figure class="card-fig concept" data-reveal>
+      <img src="assets/t1-concept.webp" alt="Camera T-1 3D render next to two photographs of the Eiffel Tower from the same viewpoint: Henry Roger, September 1888, during construction, and Nicolai Wolpert, 26 January 2017" width="1400" height="677" loading="lazy">
+      <figcaption class="mono">Fig. 2 — The idea: stand where the photographer stood. Eiffel Tower, 1888 (Henry Roger) and 2017 (Nicolai Wolpert).</figcaption>
+    </figure>
+
+    <div class="pipe-block" data-reveal>
+      <span class="mono kicker">How it works</span>
+      <div class="pipe">
+        <div class="node"><span class="mono n">01</span><b>Where you stand</b><span>Current location</span></div>
+        <div class="wire"><i></i></div>
+        <div class="node"><span class="mono n">02</span><b>Archive lookup</b><span>19k+ geolocated photos</span></div>
+        <div class="wire"><i></i></div>
+        <div class="node"><span class="mono n">03</span><b>Raspberry Pi 4</b><span>Python · Tkinter OS</span></div>
+        <div class="wire"><i></i></div>
+        <div class="node accent"><span class="mono n">04</span><b>Then, here</b><span>Touch screen · rotary encoders</span></div>
+      </div>
+    </div>
+
+    <div class="grid-3 media-row">
+      <figure class="card-fig" data-reveal>
+        <img src="assets/t1-demo.webp" alt="Animated Camera T-1 interface graphic" width="422" height="422" loading="lazy">
+        <figcaption class="mono">Fig. 3 — On‑device interface animation.</figcaption>
+      </figure>
+      <figure class="card-fig" data-reveal style="--d:.08s">
+        <img src="assets/appareil.webp" alt="The white 3D-printed Camera T-1 enclosure held in one hand" width="1400" height="1400" loading="lazy">
+        <figcaption class="mono">Fig. 4 — Custom 3D‑printed enclosure.</figcaption>
+      </figure>
+      <div class="specs" data-reveal style="--d:.16s">
+        <span class="mono kicker">Specifications</span>
+        <table>
+          <tr><th>Core</th><td>Raspberry Pi 4</td></tr>
+          <tr><th>Display</th><td>RGB touch screen</td></tr>
+          <tr><th>Input</th><td>Rotary encoders · touch</td></tr>
+          <tr><th>Power</th><td>Custom PCB (TPS563200)</td></tr>
+          <tr><th>Software</th><td>Python · Tkinter · SSH</td></tr>
+          <tr><th>Dataset</th><td>19k+ archival photos</td></tr>
+          <tr><th>Enclosure</th><td>3D‑printed, tactile controls</td></tr>
+        </table>
+        <a class="btn" href="https://github.com/oscarcaux7/Camera_T-1_OS" target="_blank" rel="noopener" data-snd>Source on GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <!-- user study -->
+    <div class="study" data-reveal>
+      <div class="study-head">
+        <div>
+          <span class="mono kicker">User study · N = 5</span>
+          <h3 class="display h3">A walk through La Défense, <em>with the past in hand.</em></h3>
+        </div>
+        <figure class="card-fig study-photo">
+          <img src="assets/t1-user-study.webp" alt="A participant crouching by the water basin at La Défense, framing the towers with Camera T-1" width="482" height="678" loading="lazy">
+          <figcaption class="mono">Fig. 5 — A participant lining up the archive, La Défense.</figcaption>
+        </figure>
+      </div>
+      <div class="grid-3 findings">
+        <div class="finding"><span class="mono n">A</span><b>Playful positioning</b><p>People turned it into a physical game — moving to match the archive's exact angle.</p></div>
+        <div class="finding"><span class="mono n">B</span><b>Enhanced awareness</b><p>Side‑by‑side comparison surfaced architectural details nobody had noticed.</p></div>
+        <div class="finding"><span class="mono n">C</span><b>Past &amp; present</b><p>Participants described empathy and a sense of time travel.</p></div>
+      </div>
+      <div class="grid-2 theory">
+        <div class="theory-card">
+          <span class="mono kicker">Spatial dissonance</span>
+          <p class="display">The visual gap <span class="arrow">→</span> <em>curiosity</em> &amp; active exploration.</p>
+        </div>
+        <div class="theory-card">
+          <span class="mono kicker">Temporal dissonance</span>
+          <p class="display">The time gap <span class="arrow">→</span> <em>imagination</em> &amp; emotional connection.</p>
+        </div>
+      </div>
+      <p class="mono muted small next">Next: an integrated compass pointing to the nearest archives, and a case rebuilt from a vintage Kodak folding camera.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 02 — RAW2EVENT ============ -->
+<section id="r2e" class="chapter">
+  <div class="wrap">
+    <div class="chapter-head" data-reveal>
+      <span class="mono kicker">Chapter 02 — Breaking the spatial frame</span>
+      <h2 class="display h1">Raw2Event</h2>
+      <p class="sub">Turning a 30 € Raspberry Pi camera into a real‑time neuromorphic event camera.</p>
+    </div>
+
+    <div class="stats" data-reveal>
+      <div class="stat"><span class="mono kicker">Commercial event camera</span><b class="display strike"><span data-count="4000">4000</span> €+</b></div>
+      <div class="stat"><span class="mono kicker">Raw2Event</span><b class="display accent"><span data-count="30">30</span> €</b></div>
+      <div class="stat"><span class="mono kicker">Sensor</span><b class="display">12 MP</b><span class="mono muted small">IMX708 vs. 346×260 DAVIS346</span></div>
+      <div class="stat"><span class="mono kicker">Autofocus</span><b class="display">PDAF</b><span class="mono muted small">absent on most event cameras</span></div>
+    </div>
+
+    <!-- scenario: child crossing -->
+    <div class="lab-demo road-demo" data-reveal id="road-demo">
+      <div class="demo-top">
+        <div>
+          <span class="mono kicker">Scenario — a child runs into the road</span>
+          <p class="demo-copy">Two identical cars, same brakes, same child stepping out from behind a parked van. The only difference is the camera. A frame camera has to <em>wait for the next frames</em> — and a fast runner is blurred across them — before the detector is sure. An event camera reports the motion <em>as it happens</em>.</p>
+        </div>
+        <div class="road-actions mono">
+          <div class="seg" role="radiogroup" aria-label="Car speed">
+            <button data-speed="30" data-snd>30 km/h</button>
+            <button data-speed="50" aria-selected="true" data-snd>50 km/h</button>
+          </div>
+          <div class="seg" role="radiogroup" aria-label="Frame camera rate">
+            <button data-fps="15" data-snd>15 fps</button>
+            <button data-fps="30" aria-selected="true" data-snd>30 fps</button>
+            <button data-fps="60" data-snd>60 fps</button>
+          </div>
+          <button class="btn solid" id="road-play" data-snd>Replay ↻</button>
+        </div>
+      </div>
+
+      <div class="road-lanes">
+        <div class="road-lane" data-lane="frame">
+          <div class="lane-head mono"><span><i class="sw frame"></i>Frame‑based camera · <b class="fps-v">30</b> fps</span><span class="lane-result" data-result>—</span></div>
+          <canvas class="road-cv" aria-label="Top-down view: car with frame-based camera approaching a child crossing"></canvas>
+          <div class="lane-tl mono" data-tl></div>
+        </div>
+        <div class="road-lane" data-lane="event">
+          <div class="lane-head mono"><span><i class="sw event"></i>Event camera · async, µs timestamps</span><span class="lane-result" data-result>—</span></div>
+          <canvas class="road-cv" aria-label="Top-down view: car with event camera approaching a child crossing"></canvas>
+          <div class="lane-tl mono" data-tl></div>
+        </div>
+      </div>
+
+      <p class="mono muted small road-note">Illustrative model, shown at 0.3× speed. Child appears 15 m ahead · frame path: next capture + 2 sharp frames + 50 ms inference · event path: ≈10 ms · then 100 ms actuation and 7.5 m/s² braking for both. Frame timing is random on every replay.</p>
+
+      <div class="ref-video">
+        <a class="yt small-yt" href="https://www.youtube.com/watch?v=cIrf4mpPXOw" target="_blank" rel="noopener" data-id="cIrf4mpPXOw" data-title="Rocket launch from a Neuromorphic Camera — Events vs. Frames" data-snd aria-label="Play the video “Rocket launch from a Neuromorphic Camera — Events vs. Frames”">
+          <img src="https://i.ytimg.com/vi/cIrf4mpPXOw/hqdefault.jpg" alt="" loading="lazy">
+          <span class="play"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        </a>
+        <div>
+          <span class="mono kicker">In the real world</span>
+          <p>The same rocket launch recorded by a frame camera and by an event camera, side by side.</p>
+          <p class="mono muted small">Video — International Centre for Neuromorphic Systems, Western Sydney University.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2 prose-row">
+      <div data-reveal>
+        <h3 class="mono kicker">The idea</h3>
+        <p class="lead">Event cameras capture independent, asynchronous pixel changes with microsecond timestamps — no motion blur, no redundant frames.</p>
+        <p>They matter for medtech, autonomous driving, drones and AR/VR. But they're expensive, low‑resolution and usually lack autofocus. Raw2Event reads <b>raw Bayer frames</b> straight from a Raspberry Pi Camera Module 3, <b>bypasses the ISP</b>, and converts them to events with the DVS‑Voltmeter model — re‑implemented in vectorised NumPy so it runs on the Pi itself.</p>
+      </div>
+      <div data-reveal style="--d:.1s">
+        <h3 class="mono kicker">The output</h3>
+        <p class="lead">Space‑time cubes in <code>.aedat4</code>: every event is just <code>e = (x, y, t, p)</code>.</p>
+        <p>Lightweight, microsecond‑precise and without redundancy. The code is open and the noise and threshold parameters are configurable — an accessible entry point into neuromorphic vision.</p>
+      </div>
+    </div>
+
+    <div class="pipe-block" data-reveal>
+      <span class="mono kicker">Pipeline</span>
+      <div class="pipe">
+        <div class="node"><span class="mono n">01</span><b>Raw Bayer</b><span>RPi Cam 3 · IMX708</span></div>
+        <div class="wire"><i></i></div>
+        <div class="node struck"><span class="mono n">02</span><b>ISP</b><span>bypassed — no tone map, no denoise</span></div>
+        <div class="wire"><i></i></div>
+        <div class="node"><span class="mono n">03</span><b>DVS‑Voltmeter</b><span>NumPy · on Raspberry Pi 5</span></div>
+        <div class="wire"><i></i></div>
+        <div class="node accent"><span class="mono n">04</span><b>.aedat4</b><span>(x, y, t, p) event stream</span></div>
+      </div>
+    </div>
+
+    <div class="grid-r2e">
+      <figure class="card-fig" data-reveal>
+        <img src="assets/raw2event.webp" alt="Test rig: a DAVIS346 event camera in a 3D-printed mount above a Raspberry Pi Camera Module 3" width="958" height="788" loading="lazy">
+        <figcaption class="mono">Fig. 6 — Rig: DAVIS346 reference above the RPi Camera Module 3.</figcaption>
+        <img class="stack" src="assets/pi-zero-setup.webp" alt="Raspberry Pi Zero connected to a Raspberry Pi Camera Module 3 by a ribbon cable" width="760" height="730" loading="lazy">
+        <figcaption class="mono">Fig. 7 — The embedded build: Raspberry Pi Zero + Camera Module 3.</figcaption>
+      </figure>
+      <div class="video" data-reveal style="--d:.08s">
+        <a class="yt" href="https://www.youtube.com/watch?v=aEC-xKLxYVY" target="_blank" rel="noopener" data-id="aEC-xKLxYVY" data-title="Ma vision neuromorphique — Oscar Caux" data-snd aria-label="Play the video “Ma vision neuromorphique”">
+          <img src="https://i.ytimg.com/vi/aEC-xKLxYVY/hqdefault.jpg" alt="" loading="lazy">
+          <span class="play"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+          <span class="mono yt-label">“Ma vision neuromorphique” — YouTube</span>
+        </a>
+        <div class="specs compact">
+          <table>
+            <tr><th>Platform</th><td>Raspberry Pi 5 / Pi Zero</td></tr>
+            <tr><th>Sensor</th><td>RPi Camera Module 3</td></tr>
+            <tr><th>Model</th><td>DVS‑Voltmeter · ISP bypass</td></tr>
+            <tr><th>Output</th><td>.aedat4 space‑time cube</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <figure class="card-fig wide" data-reveal>
+      <img src="assets/space_time_cube.webp" alt="Space-time cube of an .aedat4 recording, followed by seven 30 ms time slices showing red ON and blue OFF events" width="2400" height="1350" loading="lazy">
+      <figcaption class="mono">Fig. 8 — Space‑time cube of a recording, sliced into 30 ms windows. Red: ON · Blue: OFF.</figcaption>
+    </figure>
+
+    <p class="mono muted small ref">Reference — Z. Ning, E. Lin, S. R. Iyengar, P. Vandewalle, “Raw2Event: Converting Raw Frame Camera into Event Camera”, KU Leuven.</p>
+  </div>
+</section>
+
+<!-- ============ LAB ============ -->
+<section id="lab" class="section wrap">
+  <div class="section-head">
+    <span class="mono kicker">Lab</span>
+    <h2 class="display h2">Small experiments, <em>running in your browser.</em></h2>
+    <span class="mono muted">AI / Computer Graphics · IFT 2025</span>
+  </div>
+
+  <div class="lab-grid">
+    <article class="lab-card" id="lab-mnist" data-reveal>
+      <div class="lab-img"><img src="assets/mnist_img.webp" alt="TinyGrad MNIST interface recognising a hand-drawn 7 with 100% confidence in 8.8 ms" width="1400" height="996" loading="lazy"></div>
+      <div class="lab-body">
+        <span class="mono n">03</span>
+        <h3>TinyGrad MNIST Classifier</h3>
+        <p>End‑to‑end deep learning pipeline in TinyGrad (MLP &amp; CNN), deployed with WebGPU for real‑time inference as you draw.</p>
+        <ul class="chips mono"><li>TinyGrad</li><li>WebGPU</li><li>CNN</li></ul>
+        <div class="links">
+          <a href="https://oscarcaux7.github.io/TinyGrad-MNIST-Classifier/" target="_blank" rel="noopener" class="btn solid" data-snd>Live demo ↗</a>
+          <a href="https://github.com/oscarcaux7/TinyGrad-MNIST-Classifier" target="_blank" rel="noopener" class="btn" data-snd>Code</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="lab-card" id="lab-rag" data-reveal style="--d:.08s">
+      <div class="lab-img"><img src="assets/synapse.webp" alt="Synapse interface: local RAG chat summarising a PDF, with model settings panel" width="1600" height="886" loading="lazy"></div>
+      <div class="lab-body">
+        <span class="mono n">04</span>
+        <h3>Synapse — Browser‑Native RAG</h3>
+        <p>Privacy‑first retrieval‑augmented generation: drop PDFs, build a vector index and ask questions — entirely client‑side, nothing leaves the machine.</p>
+        <ul class="chips mono"><li>RAG</li><li>Local LLM</li><li>Vector search</li></ul>
+        <div class="links">
+          <a href="https://oscarcaux7.github.io/Browser-Native-Multi-Document-RAG-Engine-for-Systematic-Review/" target="_blank" rel="noopener" class="btn solid" data-snd>Live demo ↗</a>
+          <a href="https://github.com/oscarcaux7/Browser-Native-Multi-Document-RAG-Engine-for-Systematic-Review" target="_blank" rel="noopener" class="btn" data-snd>Code</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="lab-card" id="lab-ray" data-reveal style="--d:.16s">
+      <div class="lab-img"><img src="assets/scene2.webp" alt="WebGPU ray-marching scene editor with blended SDF sphere, box, torus and pyramid" width="1600" height="889" loading="lazy"></div>
+      <div class="lab-body">
+        <span class="mono n">05</span>
+        <h3>WebGPU Ray‑Marching Editor</h3>
+        <p>Interactive 3D editor built on signed distance fields: add, blend and move primitives with real‑time lighting.</p>
+        <ul class="chips mono"><li>WebGPU</li><li>SDF</li><li>Ray‑marching</li></ul>
+        <div class="links">
+          <a href="https://oscarcaux7.github.io/WebGPU-Project-Interactive-Ray-Marching-Scene-Editor/" target="_blank" rel="noopener" class="btn solid" data-snd>Live demo ↗</a>
+          <a href="https://github.com/oscarcaux7/WebGPU-Project-Interactive-Ray-Marching-Scene-Editor" target="_blank" rel="noopener" class="btn" data-snd>Code</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="section wrap">
+  <div class="section-head">
+    <span class="mono kicker">About</span>
+    <h2 class="display h2">Engineer by training, <em>maker by habit.</em></h2>
+    <a class="btn" href="assets/Oscar-Caux-CV.pdf" target="_blank" rel="noopener" data-snd>Download CV (PDF) ↓</a>
+  </div>
+
+  <div class="about">
+    <div class="about-intro" data-reveal>
+      <p class="lead">Master's student at ESILV and the Institute for Future Technologies, in the Creative Technology / AI‑Computer Graphics track. I build things end to end — PCB, enclosure, firmware, interface — and I'm drawn to computer vision, AI, embedded electronics and robotics.</p>
+      <p>Studied engineering and startup management at Hanyang University in Seoul. Outside the lab: MMA, boxing, competitive rugby, tennis and triathlon — plus video games, cinema, biotech and design.</p>
+    </div>
+
+    <div class="cv" data-reveal style="--d:.08s">
+      <div class="cv-block">
+        <h3 class="mono kicker">Education</h3>
+        <ul class="rows">
+          <li><span class="mono y">2025—27</span><div><b>Institute for Future Technologies</b><span>MSc · Creative Technology, AI‑Computer Graphics — Paris La Défense</span></div></li>
+          <li><span class="mono y">2025</span><div><b>Hanyang University</b><span>Exchange semester · Engineering &amp; startup management — Seoul</span></div></li>
+          <li><span class="mono y">2024—27</span><div><b>ESILV</b><span>Generalist engineering degree, AI‑CG track — Paris La Défense</span></div></li>
+          <li><span class="mono y">2022—24</span><div><b>Classes préparatoires MPSI/MP</b><span>Lycée Joffre — Montpellier</span></div></li>
+        </ul>
+      </div>
+      <div class="cv-block">
+        <h3 class="mono kicker">Experience</h3>
+        <ul class="rows">
+          <li><span class="mono y">2024—25</span><div><b>Vinci Eco Drive — Embedded systems team</b><span>Sensors (IMU, GPS), Arduino, Python; PCB design, soldering and integration for the Shell Eco‑marathon prototype.</span></div></li>
+          <li><span class="mono y">2024—25</span><div><b>Aqualand · McDonald's</b><span>Seasonal and part‑time roles alongside studies — POS management, customer relations, operations.</span></div></li>
+        </ul>
+      </div>
+      <div class="cv-block">
+        <h3 class="mono kicker">Toolbox</h3>
+        <dl class="skills">
+          <div><dt class="mono">Code</dt><dd>Python · PyTorch · TinyGrad · C# · JavaScript · HTML/CSS · WebGPU</dd></div>
+          <div><dt class="mono">Hardware</dt><dd>Embedded systems · sensors · PCB (KiCad, Altium) · soldering · Raspberry Pi</dd></div>
+          <div><dt class="mono">3D &amp; CAD</dt><dd>SolidWorks · Fusion 360 · Rhino · Unity · 3D printing</dd></div>
+          <div><dt class="mono">Design</dt><dd>Figma · Photoshop · Vegas Pro</dd></div>
+          <div><dt class="mono">Languages</dt><dd>French (native) · English (B2+ TOEFL) · Spanish (A2)</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<footer id="contact" class="contact">
+  <div class="wrap">
+    <span class="mono kicker">Contact</span>
+    <p class="display contact-line">Let's build something that <em>sees differently.</em></p>
+    <button class="email display" id="email" data-email="oscarcaux7@gmail.com" data-snd>
+      oscarcaux7@gmail.com
+      <span class="mono copy-hint">Click to copy</span>
+    </button>
+    <div class="contact-links mono">
+      <a href="https://github.com/oscarcaux7" target="_blank" rel="noopener" data-snd>GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/oscar-caux-b50944290/" target="_blank" rel="noopener" data-snd>LinkedIn ↗</a>
+      <a href="assets/Oscar-Caux-CV.pdf" target="_blank" rel="noopener" data-snd>CV ↓</a>
+    </div>
+    <div class="foot mono">
+      <span>© 2026 Oscar Caux</span>
+      <span>Hand‑built · events simulated live in your browser</span>
+      <a href="#top" data-snd>Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<div class="toast mono" id="toast" role="status"></div>
+<script src="main.js"></script>
+</body>
+</html>
