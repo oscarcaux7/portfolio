@@ -1,0 +1,5 @@
+venv/
+Fixs Portfolio.txt
+.DS_Store
+*.pyc
+__pycache__/
