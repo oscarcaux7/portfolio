@@ -1,4 +1,4 @@
-/* Oscar Caux — portfolio
+/* Oscar Caux  :  portfolio
    No dependencies. Sections: storage, theme, sound, nav, reveal, index preview,
    DVS (event camera) simulator for the hero, road scenario, misc. */
 (() => {
@@ -41,7 +41,7 @@
     readPalette(); syncThemeBtn();
   });
 
-  /* ---------- Sound (WebAudio, synthesised — no files) ---------- */
+  /* ---------- Sound (WebAudio, synthesised  :  no files) ---------- */
   const Sound = {
     ctx: null, on: false, noise: null,
     init() {
@@ -280,25 +280,25 @@
 
   let heroT = 0;
   const heroSim = DVS(heroCanvas, {
-    cell: innerWidth < 700 ? 6 : 7, C: 0.16, decay: 420, noise: 0.00004, alpha: 0.85,
+    cell: innerWidth < 700 ? 5 : 6, C: 0.16, decay: 400, noise: 0.00003, alpha: 0.75,
     scene(c, W, H) {
       c.fillStyle = '#b4b4b4'; c.fillRect(0, 0, W, H);
       const t = heroT / 1000, m = Math.min(W, H);
-      // orbiting discs, mostly on the right half so the title stays calm
-      const cx = W * 0.72, cy = H * 0.46;
+      // orbiting discs: reduced size for high contrast and clean typography
+      const cx = W * 0.74, cy = H * 0.48;
       for (let k = 0; k < 3; k++) {
-        const a = t * (0.35 + k * 0.17) + k * 2.1, rad = m * (0.18 + k * 0.1);
+        const a = t * (0.32 + k * 0.15) + k * 2.1, rad = m * (0.16 + k * 0.09);
         c.fillStyle = k === 1 ? '#f4f4f4' : '#3a3a3a';
-        c.beginPath(); c.arc(cx + Math.cos(a) * rad * 1.3, cy + Math.sin(a) * rad * 0.8, m * (0.05 + k * 0.018), 0, 7); c.fill();
+        c.beginPath(); c.arc(cx + Math.cos(a) * rad * 1.3, cy + Math.sin(a) * rad * 0.8, m * (0.026 + k * 0.012), 0, 7); c.fill();
       }
       // ring
-      c.strokeStyle = '#ffffff'; c.lineWidth = Math.max(1, m * 0.02);
-      c.beginPath(); c.arc(cx, cy, m * (0.42 + Math.sin(t * 0.6) * 0.03), 0, 7); c.stroke();
+      c.strokeStyle = '#ffffff'; c.lineWidth = Math.max(1, m * 0.012);
+      c.beginPath(); c.arc(cx, cy, m * (0.38 + Math.sin(t * 0.5) * 0.025), 0, 7); c.stroke();
       // your cursor
       if (pointer.inside) {
         pointer.sx += (pointer.x - pointer.sx) * 0.25; pointer.sy += (pointer.y - pointer.sy) * 0.25;
         c.fillStyle = '#1c1c1c';
-        c.beginPath(); c.arc(pointer.sx * W, pointer.sy * H, m * 0.075, 0, 7); c.fill();
+        c.beginPath(); c.arc(pointer.sx * W, pointer.sy * H, m * 0.045, 0, 7); c.fill();
       }
     },
   });
@@ -322,6 +322,7 @@
 
     const lanes = $$('.road-lane', wrap).map(el => ({
       el, kind: el.dataset.lane, cv: $('canvas', el), tl: $('[data-tl]', el), res: $('[data-result]', el),
+      detBadge: $('[data-det-badge]', el),
       ctx: $('canvas', el).getContext('2d'), sparks: [], ghosts: [], tDet: 0, tBrake: 0, beeped: false, ended: false,
     }));
 
@@ -335,8 +336,14 @@
         L.tBrake = L.tDet + ACT;
         L.sparks = []; L.ghosts = []; L.beeped = false; L.ended = false;
         L.res.textContent = '…'; L.res.className = 'lane-result';
+        if (L.detBadge) {
+          L.detBadge.textContent = 'Waiting for obstacle...';
+          L.detBadge.className = 'lane-det-badge';
+        }
         buildTimeline(L);
       }
+      const summ = $('#road-verdict-summary');
+      if (summ) summ.classList.remove('show');
       $('.fps-v', wrap).textContent = fps;
     }
     // front bumper position; the child appears (t = 0) when it is D metres ahead
@@ -349,7 +356,7 @@
     const stopTime = (L) => L.tBrake + v() / DEC;
     const childY = (tt) => tt < 0 ? CHILD_Y0 : Math.max(CHILD_STOP, CHILD_Y0 - CHILD_V * tt);
 
-    const AX = 0.4; // timeline spans 0–400 ms
+    const AX = 0.4; // timeline spans 0 / 400 ms
     function buildTimeline(L) {
       const pct = (x) => Math.min(100, x / AX * 100);
       let html = L.tDet / AX < 0.15 ? `<span class="mk" style="left:0"></span>` : `<span class="mk" style="left:0"><b>0 ms</b>child appears</span>`;
@@ -424,6 +431,13 @@
       c.fillRect(X(fx - len) - k * 0.05, Y(LANE_Y + wid / 2 - 0.55), k * 0.18, k * 0.4);
       c.fillStyle = L.kind === 'event' ? palette.off : palette.bg;
       c.beginPath(); c.arc(X(fx - 0.25), Y(LANE_Y), k * 0.16, 0, 7); c.fill();
+      if (t >= L.tDet && !L.ended) {
+        c.strokeStyle = L.kind === 'event' ? palette.off : palette.on;
+        c.lineWidth = Math.max(1.5, k * 0.08);
+        c.beginPath();
+        c.arc(X(fx), Y(LANE_Y), k * (0.45 + 0.25 * Math.sin((t - L.tDet) * 25)), 0, 7);
+        c.stroke();
+      }
       // child (faint while hidden behind the van)
       c.globalAlpha = t >= 0 ? 1 : 0.3; c.fillStyle = palette.on;
       c.beginPath(); c.arc(X(XC), Y(cy), k * 0.34, 0, 7); c.fill(); c.globalAlpha = 1;
@@ -456,16 +470,37 @@
         for (const p of L.sparks) p.life -= dtReal / 450;
         L.sparks = L.sparks.filter(p => p.life > 0);
 
-        if (!L.beeped && t >= L.tDet) { L.beeped = true; Sound.blip(L.kind === 'event' ? 1760 : 1100, 0.08, 0.035); }
+        if (!L.beeped && t >= L.tDet) {
+          L.beeped = true;
+          Sound.blip(L.kind === 'event' ? 1760 : 1100, 0.08, 0.035);
+          if (L.detBadge) {
+            if (L.kind === 'event') {
+              L.detBadge.textContent = `Instant Trigger : +${Math.round(L.tDet * 1000)} ms`;
+              L.detBadge.className = 'lane-det-badge good active';
+            } else {
+              const lag = Math.round((L.tDet - EV_LAT) * 1000);
+              L.detBadge.textContent = `Delayed Trigger : +${Math.round(L.tDet * 1000)} ms (+${lag} ms lag)`;
+              L.detBadge.className = 'lane-det-badge bad active';
+            }
+          }
+        }
         $$('.mk[data-at]', L.tl).forEach(m => { m.style.opacity = t >= +m.dataset.at ? 1 : 0; });
         if (!L.ended && t >= stopTime(L)) {
           L.ended = true;
           const margin = (XC - 0.34) - carFront(L, t);
           if (margin >= 0) { L.res.textContent = `Stops ${margin.toFixed(1)} m short`; L.res.className = 'lane-result good'; }
-          else { L.res.textContent = `Reaches the child · ${(-margin).toFixed(1)} m too far`; L.res.className = 'lane-result bad'; Sound.blip(180, 0.25, 0.05, 'sawtooth'); }
+          else { L.res.textContent = `Reaches obstacle · ${(-margin).toFixed(1)} m overrun`; L.res.className = 'lane-result bad'; Sound.blip(180, 0.25, 0.05, 'sawtooth'); }
         }
       }
-      if (lanes.every(L => L.ended) && t > Math.max(...lanes.map(stopTime)) + 1.2) playing = false;
+      if (lanes.every(L => L.ended) && t > Math.max(...lanes.map(stopTime)) + 0.6) {
+        playing = false;
+        const summ = $('#road-verdict-summary');
+        if (summ && !summ.classList.contains('show')) {
+          const lagMs = Math.round((lanes[0].tDet - lanes[1].tDet) * 1000);
+          summ.innerHTML = `<strong>Comparison result :</strong> The Neuromorphic Event Camera detected the obstacle <strong>${lagMs} ms faster</strong> and safely stopped before reaching the child. The conventional frame camera remained blind during inter-frame intervals, delaying braking and resulting in a collision.`;
+          summ.classList.add('show');
+        }
+      }
     }
 
     function replay() { t = -PRE; playing = true; plan(); }
@@ -520,10 +555,55 @@
   $('#email').addEventListener('click', async (e) => {
     const addr = e.currentTarget.dataset.email;
     Sound.shutter();
-    try { await navigator.clipboard.writeText(addr); showToast('Copied — ' + addr); }
+    try { await navigator.clipboard.writeText(addr); showToast('Copied : ' + addr); }
     catch { location.href = 'mailto:' + addr; }
   });
 
   /* Camera T-1 shutter on its hero image */
   $('#t1 .bleed').addEventListener('pointerdown', () => Sound.shutter());
+
+  /* ---------- Floating Next Navigation ---------- */
+  const floatingNav = $('#floating-nav');
+  const floatingBtn = $('#floating-next-btn');
+  const floatingLabel = $('#floating-next-label');
+  const flowSections = [
+    { id: 'top', nextId: 't1', label: 'Camera T-1' },
+    { id: 'work', nextId: 't1', label: 'Camera T-1' },
+    { id: 't1', nextId: 'r2e', label: 'Raw2Event' },
+    { id: 'r2e', nextId: 'lab', label: 'Lab Experiments' },
+    { id: 'lab', nextId: 'about', label: 'About' },
+    { id: 'about', nextId: 'contact', label: 'Contact' },
+    { id: 'contact', nextId: 'top', label: 'Back to top' }
+  ];
+
+  function updateFloatingNav() {
+    if (!floatingNav || !floatingBtn) return;
+    const scrollPos = window.scrollY + window.innerHeight * 0.45;
+    let current = flowSections[0];
+    for (const sec of flowSections) {
+      const el = document.getElementById(sec.id);
+      if (el && el.offsetTop <= scrollPos) {
+        current = sec;
+      }
+    }
+    if (floatingLabel) floatingLabel.textContent = current.label;
+    floatingBtn.dataset.target = current.nextId;
+    const isTopTarget = current.nextId === 'top';
+    const svgIcon = $('.floating-icon svg path', floatingBtn);
+    if (svgIcon) {
+      svgIcon.setAttribute('d', isTopTarget ? 'M8 14V4m0 0L4 8m4-4l4 4' : 'M8 2v10m0 0l4-4m-4 4L4 8');
+    }
+  }
+
+  floatingBtn?.addEventListener('click', () => {
+    const targetId = floatingBtn.dataset.target || 't1';
+    const targetEl = document.getElementById(targetId);
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  window.addEventListener('scroll', updateFloatingNav, { passive: true });
+  updateFloatingNav();
+
 })();
