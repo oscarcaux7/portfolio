@@ -1,4 +1,4 @@
-/* Oscar Caux  :  portfolio
+/* Oscar Caux · portfolio
    No dependencies. Sections: storage, theme, sound, nav, reveal, index preview,
    DVS (event camera) simulator for the hero, road scenario, misc. */
 (() => {
@@ -6,6 +6,9 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const root = document.documentElement;
+  const fr_ = root.lang === 'fr';
+  const tr = (en, fr) => fr_ ? fr : en;
+  const f1 = (x) => fr_ ? x.toFixed(1).replace('.', ',') : x.toFixed(1); // two languages, so a function beats a dictionary
 
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch { return null; } },
@@ -29,9 +32,9 @@
   const themeBtn = $('#theme-toggle');
   function syncThemeBtn() {
     // the button names the mode it switches to
-    $('.label', themeBtn).textContent = isDark() ? 'Light' : 'Dark';
+    $('.label', themeBtn).textContent = isDark() ? tr('Light', 'Clair') : tr('Dark', 'Sombre');
     themeBtn.setAttribute('aria-pressed', String(isDark()));
-    themeBtn.setAttribute('aria-label', isDark() ? 'Switch to light mode' : 'Switch to dark mode');
+    themeBtn.setAttribute('aria-label', isDark() ? tr('Switch to light mode', 'Passer en mode clair') : tr('Switch to dark mode', 'Passer en mode sombre'));
   }
   syncThemeBtn();
   darkMq.addEventListener('change', syncThemeBtn);
@@ -41,7 +44,7 @@
     readPalette(); syncThemeBtn();
   });
 
-  /* ---------- Sound (WebAudio, synthesised  :  no files) ---------- */
+  /* ---------- Sound (WebAudio, synthesised, no files) ---------- */
   const Sound = {
     ctx: null, on: false, noise: null,
     init() {
@@ -81,7 +84,7 @@
   function setSound(on) {
     Sound.on = on;
     soundBtn.setAttribute('aria-pressed', String(on));
-    $('.label', soundBtn).textContent = on ? 'Sound on' : 'Sound off';
+    $('.label', soundBtn).textContent = on ? tr('Sound on', 'Son activé') : tr('Sound off', 'Son coupé');
     store.set('oc-sound', on ? '1' : '0');
   }
   soundBtn.addEventListener('click', () => {
@@ -92,7 +95,7 @@
   });
   // Remembered preference still needs a user gesture before audio can start.
   if (store.get('oc-sound') === '1') {
-    $('.label', soundBtn).textContent = 'Sound: tap';
+    $('.label', soundBtn).textContent = tr('Sound: tap', 'Son : toucher');
     const arm = () => { Sound.init(); Sound.ctx && Sound.ctx.resume(); setSound(true); };
     addEventListener('pointerdown', arm, { once: true });
   }
@@ -287,13 +290,13 @@
       // orbiting discs: reduced size for high contrast and clean typography
       const cx = W * 0.74, cy = H * 0.48;
       for (let k = 0; k < 3; k++) {
-        const a = t * (0.32 + k * 0.15) + k * 2.1, rad = m * (0.16 + k * 0.09);
+        const a = t * (0.32 + k * 0.15) + k * 2.1, rad = m * (0.12 + k * 0.07);
         c.fillStyle = k === 1 ? '#f4f4f4' : '#3a3a3a';
         c.beginPath(); c.arc(cx + Math.cos(a) * rad * 1.3, cy + Math.sin(a) * rad * 0.8, m * (0.026 + k * 0.012), 0, 7); c.fill();
       }
       // ring
       c.strokeStyle = '#ffffff'; c.lineWidth = Math.max(1, m * 0.012);
-      c.beginPath(); c.arc(cx, cy, m * (0.38 + Math.sin(t * 0.5) * 0.025), 0, 7); c.stroke();
+      c.beginPath(); c.arc(cx, cy, m * (0.3 + Math.sin(t * 0.5) * 0.02), 0, 7); c.stroke();
       // your cursor
       if (pointer.inside) {
         pointer.sx += (pointer.x - pointer.sx) * 0.25; pointer.sy += (pointer.y - pointer.sy) * 0.25;
@@ -315,35 +318,36 @@
   (function roadScenario() {
     const wrap = $('#road-demo');
     if (!wrap) return;
-    const D = 15, ACT = 0.1, DEC = 7.5, EV_LAT = 0.01, INF = 0.05, SHARP = 2, SLOW = 0.3, PRE = 1.2;
+    const D = 15, ACT = 0.1, DEC = 7.5, EV_LAT = 0.01, INF = 0.05, SHARP = 2, PRE = 1.2;
     const XC = 0, VIEW_X0 = -23, VIEW_W = 30, VIEW_Y0 = 2.6, VIEW_H = 8.6;
     const LANE_Y = 6.45, CHILD_Y0 = 9.3, CHILD_STOP = 6.9, CHILD_V = 3;
     let kmh = 50, fps = 30, t = -PRE, playing = false, phase = 0, started = false;
+    let speed = 0.3, paused = false, silent = false; // silent: no sound while seeking
 
     const lanes = $$('.road-lane', wrap).map(el => ({
       el, kind: el.dataset.lane, cv: $('canvas', el), tl: $('[data-tl]', el), res: $('[data-result]', el),
-      detBadge: $('[data-det-badge]', el),
       ctx: $('canvas', el).getContext('2d'), sparks: [], ghosts: [], tDet: 0, tBrake: 0, beeped: false, ended: false,
     }));
 
+    const laneOf = (kind) => lanes.find(L => L.kind === kind);
+    const score = (k) => $(`[data-score="${k}"]`, wrap);
+    const verdict = $('#road-verdict');
+    const ms = (s) => `+${Math.round(s * 1000)} ms`;
     const v = () => kmh / 3.6;
-    function plan() {
+    function plan(keepPhase) {
       const period = 1 / fps;
-      phase = Math.random() * period;
+      if (!keepPhase) phase = Math.random() * period;
       for (const L of lanes) {
         // frame path: wait for the next capture, then SHARP more frames to confirm, then inference
         L.tDet = L.kind === 'event' ? EV_LAT : phase + SHARP * period + INF;
         L.tBrake = L.tDet + ACT;
         L.sparks = []; L.ghosts = []; L.beeped = false; L.ended = false;
-        L.res.textContent = '…'; L.res.className = 'lane-result';
-        if (L.detBadge) {
-          L.detBadge.textContent = 'Waiting for obstacle...';
-          L.detBadge.className = 'lane-det-badge';
-        }
+        L.res.textContent = '…'; L.res.className = 'lane-result'; L.margin = 0;
         buildTimeline(L);
       }
-      const summ = $('#road-verdict-summary');
-      if (summ) summ.classList.remove('show');
+      $$('[data-score]', wrap).forEach(el => { if (el.dataset.score !== 'lead-m') el.textContent = '…'; });
+      score('lead-m').textContent = tr('distance driven before the frame camera reacts', 'distance parcourue avant que la caméra à images réagisse');
+      verdict.classList.remove('show');
       $('.fps-v', wrap).textContent = fps;
     }
     // front bumper position; the child appears (t = 0) when it is D metres ahead
@@ -359,13 +363,13 @@
     const AX = 0.4; // timeline spans 0 / 400 ms
     function buildTimeline(L) {
       const pct = (x) => Math.min(100, x / AX * 100);
-      let html = L.tDet / AX < 0.15 ? `<span class="mk" style="left:0"></span>` : `<span class="mk" style="left:0"><b>0 ms</b>child appears</span>`;
+      let html = L.tDet / AX < 0.15 ? `<span class="mk" style="left:0"></span>` : `<span class="mk" style="left:0"><b>0 ms</b>${tr('child appears', 'l’enfant apparaît')}</span>`;
       if (L.kind === 'frame') {
         for (let k = 0; phase + k / fps < AX; k++) html += `<i class="tick" style="left:${pct(phase + k / fps)}%"></i>`;
       }
       const lab = (x, cls, title, sub) => `<span class="mk ${cls} ${x / AX > 0.72 ? 'flip' : ''}" data-at="${x}" style="left:${pct(x)}%;opacity:0"><b>${title}</b>${sub}</span>`;
-      html += lab(L.tDet, 'det', `+${Math.round(L.tDet * 1000)} ms`, 'detected');
-      html += lab(L.tBrake, 'brk', `+${Math.round(L.tBrake * 1000)} ms`, 'brakes');
+      html += lab(L.tDet, 'det', `+${Math.round(L.tDet * 1000)} ms`, tr('detected', 'détecté'));
+      html += lab(L.tBrake, 'brk', `+${Math.round(L.tBrake * 1000)} ms`, tr('brakes', 'freine'));
       L.tl.innerHTML = html;
     }
 
@@ -422,6 +426,16 @@
         }
         c.globalAlpha = 1;
       }
+      // sensor status, written above the car from the moment the child appears
+      if (t >= 0) {
+        const seen = t >= L.tDet;
+        c.font = `500 ${Math.max(11 * (W / L.cv.clientWidth), k * 0.62)}px "Geist Mono", ui-monospace, monospace`;
+        c.textBaseline = 'bottom'; c.textAlign = 'left';
+        c.fillStyle = seen ? (L.kind === 'event' ? palette.off : palette.ink) : palette.on;
+        const label = seen ? `${tr('CHILD DETECTED', 'ENFANT DÉTECTÉ')} ${ms(L.tDet)}` : tr('CHILD NOT DETECTED YET', 'ENFANT PAS ENCORE DÉTECTÉ');
+        // keep the whole label inside the canvas, also on a phone
+        c.fillText(label, Math.min(Math.max(X(fx - 4.5), k * 0.5), W - c.measureText(label).width - k * 0.5), Y(LANE_Y - 1.25));
+      }
       // car
       const len = 4.5, wid = 1.85;
       c.fillStyle = palette.ink; roundRect(c, X(fx - len), Y(LANE_Y - wid / 2), len * k, wid * k, k * 0.45); c.fill();
@@ -449,7 +463,7 @@
 
     function update(dtReal) {
       const prev = t;
-      if (playing) t += dtReal / 1000 * SLOW;
+      if (playing) t += dtReal / 1000 * speed;
       for (const L of lanes) {
         if (L.kind === 'frame') {
           const period = 1 / fps;
@@ -472,38 +486,65 @@
 
         if (!L.beeped && t >= L.tDet) {
           L.beeped = true;
-          Sound.blip(L.kind === 'event' ? 1760 : 1100, 0.08, 0.035);
-          if (L.detBadge) {
-            if (L.kind === 'event') {
-              L.detBadge.textContent = `Instant Trigger : +${Math.round(L.tDet * 1000)} ms`;
-              L.detBadge.className = 'lane-det-badge good active';
-            } else {
-              const lag = Math.round((L.tDet - EV_LAT) * 1000);
-              L.detBadge.textContent = `Delayed Trigger : +${Math.round(L.tDet * 1000)} ms (+${lag} ms lag)`;
-              L.detBadge.className = 'lane-det-badge bad active';
-            }
+          silent || Sound.blip(L.kind === 'event' ? 1760 : 1100, 0.08, 0.035);
+          score(L.kind).textContent = ms(L.tDet);
+          if (L.kind === 'frame') {
+            const lead = L.tDet - laneOf('event').tDet;
+            score('lead').textContent = `${Math.round(lead * 1000)} ms`;
+            score('lead-m').textContent = tr(`${f1((v() * lead))} m driven at ${kmh} km/h before the frame camera reacts`, `${f1((v() * lead))} m parcourus à ${kmh} km/h avant que la caméra à images réagisse`);
           }
         }
         $$('.mk[data-at]', L.tl).forEach(m => { m.style.opacity = t >= +m.dataset.at ? 1 : 0; });
         if (!L.ended && t >= stopTime(L)) {
           L.ended = true;
-          const margin = (XC - 0.34) - carFront(L, t);
-          if (margin >= 0) { L.res.textContent = `Stops ${margin.toFixed(1)} m short`; L.res.className = 'lane-result good'; }
-          else { L.res.textContent = `Reaches obstacle · ${(-margin).toFixed(1)} m overrun`; L.res.className = 'lane-result bad'; Sound.blip(180, 0.25, 0.05, 'sawtooth'); }
+          const margin = L.margin = (XC - 0.34) - carFront(L, t);
+          if (margin >= 0) { L.res.textContent = tr(`Stops ${f1(margin)} m short`, `S’arrête ${f1(margin)} m avant`); L.res.className = 'lane-result good'; }
+          else { L.res.textContent = tr(`Reaches the child · ${f1((-margin))} m overrun`, `Atteint l’enfant · ${f1((-margin))} m de dépassement`); L.res.className = 'lane-result bad'; silent || Sound.blip(180, 0.25, 0.05, 'sawtooth'); }
         }
       }
       if (lanes.every(L => L.ended) && t > Math.max(...lanes.map(stopTime)) + 0.6) {
         playing = false;
-        const summ = $('#road-verdict-summary');
-        if (summ && !summ.classList.contains('show')) {
-          const lagMs = Math.round((lanes[0].tDet - lanes[1].tDet) * 1000);
-          summ.innerHTML = `<strong>Comparison result :</strong> The Neuromorphic Event Camera detected the obstacle <strong>${lagMs} ms faster</strong> and safely stopped before reaching the child. The conventional frame camera remained blind during inter-frame intervals, delaying braking and resulting in a collision.`;
-          summ.classList.add('show');
+        if (!verdict.classList.contains('show')) {
+          const ev = laneOf('event'), fr = laneOf('frame');
+          const lead = fr.tDet - ev.tDet;
+          const outcome = ev.margin >= 0 && fr.margin < 0 ? tr('The car with the event camera stops in time, the car with the frame camera does not.', 'La voiture à caméra événementielle s’arrête à temps, celle à caméra à images non.')
+            : ev.margin >= 0 ? tr(`Both cars stop in time, the one with the event camera ${f1((ev.margin - fr.margin))} m earlier.`, `Les deux voitures s’arrêtent à temps, celle à caméra événementielle ${f1((ev.margin - fr.margin))} m plus tôt.`)
+            : tr('At this speed neither car stops in time.', 'À cette vitesse, aucune des deux voitures ne s’arrête à temps.');
+          const ms0 = Math.round(lead * 1000), m0 = f1(v() * lead);
+          verdict.innerHTML = tr(`<strong>Result.</strong> The event camera detected the child <strong>${ms0} ms before</strong> the frame camera, which is ${m0} m of road at ${kmh} km/h. ${outcome}`,
+            `<strong>Résultat.</strong> La caméra événementielle a détecté l’enfant <strong>${ms0} ms avant</strong> la caméra à images, soit ${m0} m de route à ${kmh} km/h. ${outcome}`);
+          verdict.classList.add('show');
         }
       }
     }
 
-    function replay() { t = -PRE; playing = true; plan(); }
+    function replay() { t = -PRE; playing = true; setPaused(false); plan(); }
+
+    // playback: pause, speed and a time bar; seeking replays the same run without sound
+    const pauseBtn = $('#road-pause'), scrub = $('#road-scrub'), clockEl = $('#road-clock');
+    const endT = () => Math.max(...lanes.map(stopTime)) + 0.6;
+    function setPaused(p) {
+      paused = p;
+      pauseBtn.textContent = p ? tr('Play', 'Lecture') : tr('Pause', 'Pause');
+      pauseBtn.setAttribute('aria-pressed', String(p));
+    }
+    function seek(target) {
+      t = -PRE; playing = true; plan(true); silent = true;
+      while (playing && t < target) update(16);
+      silent = false;
+    }
+    function syncTransport() {
+      if (!paused) scrub.value = Math.round((t + PRE) / (endT() + PRE) * 1000);
+      clockEl.textContent = t < 0 ? tr('child hidden', 'enfant caché') : `+${Math.round(t * 1000)} ms`;
+    }
+    pauseBtn.addEventListener('click', () => {
+      if (!playing) { replay(); return; } // finished: play again from the start
+      setPaused(!paused);
+    });
+    scrub.addEventListener('input', () => { setPaused(true); seek(scrub.value / 1000 * (endT() + PRE) - PRE); });
+    $$('[data-rate]', wrap).forEach(b => b.addEventListener('click', () => {
+      speed = +b.dataset.rate; $$('[data-rate]', wrap).forEach(x => x.setAttribute('aria-selected', String(x === b)));
+    }));
     $('#road-play').addEventListener('click', replay);
     $$('[data-speed]', wrap).forEach(b => b.addEventListener('click', () => {
       kmh = +b.dataset.speed; $$('[data-speed]', wrap).forEach(x => x.setAttribute('aria-selected', String(x === b))); replay();
@@ -515,8 +556,93 @@
     plan();
     runWhenVisible(wrap, (now, dt) => {
       if (!started) { started = true; replay(); }
-      update(dt);
+      if (!paused) update(dt);
       lanes.forEach(draw);
+      syncTransport();
+    });
+  })();
+
+
+  /* ---------- One pixel: when does it fire an event? ----------
+     Same rule as the hero simulator: compare with the level of the last event,
+     fire when the change passes the threshold C, then move the memory. */
+  (function pixelDemo() {
+    const cv = $('#px-cv'); if (!cv) return;
+    const ctx = cv.getContext('2d'), slider = $('#px-c'), cOut = $('#px-c-v');
+    const N = 60; // camera frames across the plot
+    const ease = (u, a, b) => { const x = Math.min(1, Math.max(0, (u - a) / (b - a))); return x * x * (3 - 2 * x); };
+    // an edge passes the pixel (brighter), small flicker, then a shadow (darker)
+    const sig = (u) => 0.28 + 0.46 * ease(u, 0.16, 0.3)
+      + 0.035 * Math.sin(u * 90) * ease(u, 0.32, 0.36) * (1 - ease(u, 0.5, 0.54))
+      - 0.38 * ease(u, 0.58, 0.72);
+    const C = () => +slider.value * 0.05;
+    slider.addEventListener('input', () => { cOut.textContent = C().toFixed(2).replace('.', fr_ ? ',' : '.'); });
+    slider.dispatchEvent(new Event('input'));
+
+    function run(c, upTo) {
+      let mem = sig(0); const memAt = [mem], ev = [];
+      for (let i = 1; i <= upTo; i++) {
+        const d = sig(i / N) - mem, k = Math.floor(Math.abs(d) / c);
+        for (let j = 0; j < k; j++) ev.push({ i, p: d > 0 ? 1 : -1, j });
+        mem += Math.sign(d) * k * c; memAt.push(mem);
+      }
+      return { ev, memAt };
+    }
+
+    function draw(now) {
+      const dpr = Math.min(devicePixelRatio || 1, 2), w = cv.clientWidth, h = cv.clientHeight;
+      if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+      const W = cv.width, H = cv.height, c = C(), upTo = Math.floor(now * N);
+      const { ev, memAt } = run(c, upTo);
+      const fs = 11 * dpr, x0 = 14 * dpr, x1 = W - 14 * dpr;
+      const yT = fs * 2.6, yB = H * 0.64, laneY = H * 0.84;
+      const X = (u) => x0 + u * (x1 - x0), Y = (v) => yB - v * (yB - yT);
+      ctx.clearRect(0, 0, W, H);
+      ctx.font = `500 ${fs}px "Geist Mono", ui-monospace, monospace`;
+      ctx.fillStyle = palette.ink3; ctx.textAlign = 'left';
+      ctx.fillText(tr('BRIGHTNESS OF ONE PIXEL', 'LUMINOSITÉ D’UN PIXEL'), x0, fs * 1.4);
+      ctx.fillText(tr('EVENTS', 'ÉVÉNEMENTS'), x0, laneY - 20 * dpr);
+      // threshold band around the current memory
+      const m = memAt[memAt.length - 1], xn = X(upTo / N);
+      ctx.fillStyle = palette.bg2; ctx.fillRect(xn, Y(m + c), x1 - xn, Y(m - c) - Y(m + c));
+      ctx.setLineDash([4 * dpr, 4 * dpr]); ctx.strokeStyle = palette.line; ctx.lineWidth = dpr;
+      for (const v of [m + c, m - c]) { ctx.beginPath(); ctx.moveTo(xn, Y(v)); ctx.lineTo(x1, Y(v)); ctx.stroke(); }
+      ctx.setLineDash([]);
+      ctx.fillStyle = palette.ink3; ctx.textAlign = 'right';
+      ctx.fillText(tr('threshold ±C', 'seuil ±C'), x1, Y(m + c) - 4 * dpr);
+      ctx.textAlign = 'left';
+      // the signal still to come, faint
+      ctx.strokeStyle = palette.line; ctx.lineWidth = 1.5 * dpr; ctx.beginPath();
+      for (let k = 0; k <= 200; k++) { const u = k / 200; if (k) ctx.lineTo(X(u), Y(sig(u))); else ctx.moveTo(X(u), Y(sig(u))); }
+      ctx.stroke();
+      // memory: a staircase that only moves when an event fires
+      ctx.strokeStyle = palette.ink3; ctx.lineWidth = 2 * dpr; ctx.beginPath();
+      ctx.moveTo(X(0), Y(memAt[0]));
+      for (let i = 1; i < memAt.length; i++) { ctx.lineTo(X(i / N), Y(memAt[i - 1])); ctx.lineTo(X(i / N), Y(memAt[i])); }
+      ctx.lineTo(xn, Y(m)); ctx.stroke();
+      // what the camera actually sampled, one dot per frame
+      ctx.strokeStyle = palette.ink; ctx.lineWidth = 2 * dpr; ctx.beginPath();
+      for (let i = 0; i <= upTo; i++) { if (i) ctx.lineTo(X(i / N), Y(sig(i / N))); else ctx.moveTo(X(0), Y(sig(0))); }
+      ctx.stroke();
+      ctx.fillStyle = palette.ink;
+      for (let i = 0; i <= upTo; i++) { ctx.beginPath(); ctx.arc(X(i / N), Y(sig(i / N)), 2 * dpr, 0, 7); ctx.fill(); }
+      // event lane: ON up in red, OFF down in blue, side by side when one frame fires several
+      ctx.strokeStyle = palette.line; ctx.lineWidth = dpr; ctx.beginPath(); ctx.moveTo(x0, laneY); ctx.lineTo(x1, laneY); ctx.stroke();
+      const hh = 14 * dpr;
+      for (const e of ev) {
+        ctx.fillStyle = e.p > 0 ? palette.on : palette.off;
+        ctx.fillRect(X(e.i / N) + e.j * 4 * dpr - 1.5 * dpr, e.p > 0 ? laneY - hh : laneY, 3 * dpr, hh);
+        ctx.globalAlpha = 0.25; ctx.fillRect(X(e.i / N) - dpr / 2, Y(memAt[e.i]), dpr, laneY - Y(memAt[e.i])); ctx.globalAlpha = 1;
+      }
+      const on = ev.filter(e => e.p > 0).length;
+      ctx.fillStyle = palette.ink; ctx.textAlign = 'right';
+      ctx.fillText(`${on} ON · ${ev.length - on} OFF`, x1, fs * 1.4);
+      ctx.textAlign = 'left';
+    }
+
+    const CYCLE = 7000, HOLD = 1800;
+    runWhenVisible(cv, (time) => {
+      draw(reduced ? 1 : Math.min(1, (time % (CYCLE + HOLD)) / CYCLE));
     });
   })();
 
@@ -555,7 +681,7 @@
   $('#email').addEventListener('click', async (e) => {
     const addr = e.currentTarget.dataset.email;
     Sound.shutter();
-    try { await navigator.clipboard.writeText(addr); showToast('Copied : ' + addr); }
+    try { await navigator.clipboard.writeText(addr); showToast(tr('Copied ', 'Copié ') + addr); }
     catch { location.href = 'mailto:' + addr; }
   });
 
@@ -570,10 +696,10 @@
     { id: 'top', nextId: 't1', label: 'Camera T-1' },
     { id: 'work', nextId: 't1', label: 'Camera T-1' },
     { id: 't1', nextId: 'r2e', label: 'Raw2Event' },
-    { id: 'r2e', nextId: 'lab', label: 'Lab Experiments' },
-    { id: 'lab', nextId: 'about', label: 'About' },
+    { id: 'r2e', nextId: 'lab', label: tr('Lab', 'Labo') },
+    { id: 'lab', nextId: 'about', label: tr('About', 'À propos') },
     { id: 'about', nextId: 'contact', label: 'Contact' },
-    { id: 'contact', nextId: 'top', label: 'Back to top' }
+    { id: 'contact', nextId: 'top', label: tr('Back to top', 'Haut de page') }
   ];
 
   function updateFloatingNav() {
@@ -602,6 +728,14 @@
       targetEl.scrollIntoView({ behavior: 'smooth' });
     }
   });
+
+  // step aside while a chapter's own "next" button is on screen
+  const nextRows = new Set();
+  const nextObs = new IntersectionObserver((entries) => {
+    for (const en of entries) { if (en.isIntersecting) nextRows.add(en.target); else nextRows.delete(en.target); }
+    floatingNav.classList.toggle('hidden', nextRows.size > 0);
+  });
+  $$('.next-row').forEach(el => nextObs.observe(el));
 
   window.addEventListener('scroll', updateFloatingNav, { passive: true });
   updateFloatingNav();

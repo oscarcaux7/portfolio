@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Oscar Caux · Creative Technologist</title>
-<meta name="description" content="Oscar Caux · Creative Technologist. Embedded systems, computer vision and tangible HCI. Camera T-1, Raw2Event and browser-native experiments.">
+<title>Oscar Caux · Embedded systems, computer vision and AI</title>
+<meta name="description" content="Oscar Caux, engineering student at ESILV, looking for a 5th-year internship in AI, embedded systems and computer vision. Camera T-1, an event-camera reproduction and browser-native experiments.">
+<link rel="alternate" hreflang="en" href="https://oscarcaux7.github.io/portfolio/">
+<link rel="alternate" hreflang="fr" href="https://oscarcaux7.github.io/portfolio/fr.html">
 <meta name="theme-color" content="#F3F0E8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A1917'/%3E%3Crect x='8' y='8' width='7' height='7' fill='%23D6452B'/%3E%3Crect x='17' y='17' width='7' height='7' fill='%232D5BD0'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -25,7 +27,8 @@
     <a href="#contact" data-snd>Contact</a>
   </nav>
   <div class="nav-tools">
-    <span class="mono nav-clock" title="Local time in Paris"><span id="clock">--:--</span> PAR</span>
+    <a class="chip" href="fr.html" hreflang="fr" lang="fr" aria-label="Version française" data-snd>FR</a>
+    <span class="mono nav-clock" title="Local time in Paris"><span id="clock">00:00</span> PAR</span>
     <button class="chip" id="sound-toggle" aria-pressed="false" data-snd>
       <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="label">Sound off</span>
     </button>
@@ -43,7 +46,7 @@
   <canvas id="hero-dvs" aria-hidden="true"></canvas>
   <div class="wrap hero-inner">
     <div class="hero-top mono">
-      <span>Portfolio : 2026</span>
+      <span>Portfolio 2026</span>
       <span>Creative Technologist</span>
       <span>ESILV × Institute for Future Technologies</span>
       <span>Paris · La Défense</span>
@@ -55,13 +58,17 @@
     </h1>
 
     <div class="hero-lede">
-      Final year engineering student at ESILV × Institute for Future Technologies (IFT).
-      Specializing in Embedded Systems, Computer Vision and Tangible HCI.
+      Engineering student at ESILV × Institute for Future Technologies (IFT).
+      Looking for a 5th-year internship in AI, embedded systems and computer vision.
+      <div class="hero-cta">
+        <a class="btn solid" href="#contact" data-snd>Get in touch</a>
+        <a class="btn" href="assets/Oscar_Caux_Resume.pdf" target="_blank" rel="noopener" data-snd>Resume ↓</a>
+      </div>
     </div>
 
     <div class="hero-bottom">
       <ul class="tags">
-        <li>Embedded systems</li><li>Computer vision</li><li>RF &amp; Telemetry</li><li>Tangible HCI</li><li>Prototyping</li>
+        <li>AI &amp; machine learning</li><li>Embedded systems</li><li>Computer vision</li><li>RF &amp; telemetry</li><li>Tangible HCI</li>
       </ul>
       <div class="readout mono" aria-live="off">
         <span class="dot on"></span> ON <span class="dot off"></span> OFF
@@ -90,13 +97,13 @@
       <span class="i-stack mono">Raspberry Pi 4 · Python · PCB</span>
       <span class="i-badge mono">CHI 2026</span>
     </a></li>
-    <li><a href="#r2e" data-snd data-preview="assets/space_time_cube.webp">
+    <li><a href="#r2e" data-snd data-preview="assets/pi-zero-setup.webp">
       <span class="i-num mono">02</span>
-      <span class="i-thumb"><img src="assets/space_time_cube.webp" alt="Raw2Event preview" loading="lazy"></span>
-      <span class="i-title">Raw2Event <em>a 30 € event camera</em></span>
-      <span class="i-tag mono">Research · Vision</span>
-      <span class="i-stack mono">Raspberry Pi 5 · DVS-Voltmeter</span>
-      <span class="i-badge mono ghost">Research</span>
+      <span class="i-thumb"><img src="assets/pi-zero-setup.webp" alt="Raw2Event preview" loading="lazy"></span>
+      <span class="i-title">Raw2Event <em>research paper reproduced on a Pi Zero</em></span>
+      <span class="i-tag mono">Reproduction · Vision</span>
+      <span class="i-stack mono">Raspberry Pi Zero · DVS-Voltmeter</span>
+      <span class="i-badge mono ghost">Reproduction</span>
     </a></li>
     <li><a href="#lab-mnist" data-snd data-preview="assets/mnist_img.webp">
       <span class="i-num mono">03</span>
@@ -126,81 +133,76 @@
   <div class="preview" id="preview" aria-hidden="true"><img alt=""></div>
 </section>
 
-<!-- ============ CHAPTER 01 : CAMERA T-1 ============ -->
+<!-- ============ CHAPTER 01 · CAMERA T-1 ============ -->
 <section id="t1" class="chapter">
   <div class="wrap">
     <div class="chapter-head" data-reveal>
-      <span class="mono kicker">Chapter 01 : Situated Archival Camera</span>
+      <span class="mono kicker">Chapter 01 · Situated archival camera</span>
       <h2 class="display h1">Camera T-1</h2>
-      <p class="sub">A handheld camera retrieving and displaying archival photographs of your exact location in-situ.</p>
+      <p class="sub">A handheld camera that retrieves archival photographs of the exact place where you stand.</p>
     </div>
 
     <dl class="meta-strip mono" data-reveal>
       <div><dt>Type</dt><dd>Tangible interface · Lead project</dd></div>
-      <div><dt>With</dt><dd>Thimothée Darmaillacq</dd></div>
+      <div><dt>With</dt><dd>Timothée Darmaillacq</dd></div>
       <div><dt>Year</dt><dd>2025</dd></div>
       <div><dt>Status</dt><dd><span class="pill">CHI 2026 submission</span></dd></div>
     </dl>
 
-    <div class="chi-callout" data-reveal>
-      <div class="chi-badge mono"><span class="dot on"></span> CHI 2026 Research Paper Submission</div>
-      <p>Research paper submitted to <strong>ACM CHI 2026</strong> (Conference on Human Factors in Computing Systems), the premier international venue for Human-Computer Interaction (HCI). The paper details the physical design of Camera T-1, spatial and temporal dissonance theories, and tangible interaction workflows.</p>
+    <div class="callout" data-reveal>
+      <div class="callout-badge mono"><span class="dot on"></span> Research paper · CHI 2026 submission</div>
+      <p>I co-wrote a research paper about Camera T-1 and submitted it to <strong>ACM CHI 2026</strong> (Conference on Human Factors in Computing Systems), the main international conference in Human-Computer Interaction. The paper describes the physical design of the device, the notions of spatial and temporal dissonance it relies on, and its tangible interaction workflow.</p>
     </div>
   </div>
 
   <figure class="bleed" data-reveal>
-    <div class="parallax"><img src="assets/montage.webp" alt="Camera T-1 held up in front of the Bourse de Commerce in Paris, its screen showing an archival photograph of the same building" width="1600" height="1200"></div>
-    <figcaption class="wrap mono">Fig. 1 : Bourse de Commerce, Paris. The present vantage point in front, historical archive aligned on screen.</figcaption>
+    <div class="parallax"><img src="assets/montage.webp" alt="Camera T-1 held up in front of the Bourse de Commerce in Paris, its screen showing an archival photograph of the same building" width="1400" height="1050"></div>
+    <figcaption class="wrap mono">Fig. 1 · Bourse de Commerce, Paris. The present view in front, the archival photograph of the same spot on screen.</figcaption>
   </figure>
 
   <div class="wrap">
     <div class="grid-2 prose-row">
       <div data-reveal>
         <h3 class="mono kicker">The problem</h3>
-        <p class="lead">We experience places as static backdrops, not as human stories. Archives exist, but they sit detached from the streets they document.</p>
-        <ul class="bullet-list">
-          <li>Places perceived as static backdrops rather than human histories</li>
-          <li>Disconnection between modern pedestrians and past events</li>
-          <li>Lack of contextual empathy for urban environments</li>
-          <li>Historical archives stored away, detached from the physical locations they document</li>
-        </ul>
+        <p class="lead">Historical photographs are kept in archives, far from the streets they show. On site, nothing connects a passer-by to what happened there before.</p>
+        <p>Camera T-1 brings the archive back to its location. It follows <b>slow technology</b> principles: you walk to the place, frame the scene and turn a physical dial to travel through the years.</p>
       </div>
-      <blockquote class="pull" data-reveal style="--d:.1s">
-        <span class="mono kicker">Research question</span>
-        <p>“Can a tangible device bridge the gap between <em>individual</em> and <em>collective</em> memory?”</p>
-      </blockquote>
+      <div data-reveal style="--d:.1s">
+        <h3 class="mono kicker">Research question</h3>
+        <p class="lead">Can a tangible device bridge the gap between individual and collective memory?</p>
+        <p>The device shows the same viewpoint at two moments in time. The gap between what you see and what the archive shows is what the paper calls <b>spatial and temporal dissonance</b>.</p>
+      </div>
     </div>
-
-    <!-- pipeline -->
-    <figure class="card-fig concept" data-reveal>
-      <img src="assets/t1-concept.webp" alt="Camera T-1 3D render next to two photographs of the Eiffel Tower from the same viewpoint: Henry Roger, September 1888, during construction, and Nicolai Wolpert, 26 January 2017" width="1400" height="677" loading="lazy">
-      <figcaption class="mono">Fig. 2 : Stand where the original photographer stood. Eiffel Tower in 1888 (Henry Roger) and 2017 (Nicolai Wolpert).</figcaption>
-    </figure>
 
     <div class="pipe-block" data-reveal>
-      <span class="mono kicker">How it works : Processing pipeline</span>
+      <span class="mono kicker">Pipeline · From your position to the archive</span>
       <div class="pipe pipe-5">
-        <div class="node"><span class="mono n">01</span><b>When you take a photo</b><span>User frames physical scene and triggers capture</span></div>
+        <div class="node"><span class="mono n">01</span><b>Locate</b><span>A phone sends its GPS position to the Raspberry Pi over Wi-Fi</span></div>
         <div class="wire"><i></i></div>
-        <div class="node"><span class="mono n">02</span><b>Archive lookup</b><span>Query 19k+ geolocated photos by position &amp; heading</span></div>
+        <div class="node"><span class="mono n">02</span><b>Choose a year</b><span>Turning the rotary encoder sets the target year</span></div>
         <div class="wire"><i></i></div>
-        <div class="node"><span class="mono n">03</span><b>Raspberry Pi 4 OS</b><span>Python &amp; Tkinter filter metadata &amp; perspective geometry</span></div>
+        <div class="node"><span class="mono n">03</span><b>Capture</b><span>Pressing the dial while framing the scene sends the request</span></div>
         <div class="wire"><i></i></div>
-        <div class="node"><span class="mono n">04</span><b>Tangible dials</b><span>Rotary encoders scrub decades &amp; blend past with present</span></div>
+        <div class="node"><span class="mono n">04</span><b>Archive lookup</b><span>A Flask server searches 19k+ geolocated photos for this place and year</span></div>
         <div class="wire"><i></i></div>
-        <div class="node accent"><span class="mono n">05</span><b>In-situ overlay</b><span>High-res screen aligns history directly over current view</span></div>
+        <div class="node accent"><span class="mono n">05</span><b>On-site display</b><span>The archival photo appears on screen with its date, author and source</span></div>
       </div>
     </div>
 
+    <figure class="card-fig wide" data-reveal>
+      <img src="assets/t1-concept.webp" alt="Camera T-1 3D render next to two photographs of the Eiffel Tower from the same viewpoint: Henry Roger, September 1888, during construction, and Nicolai Wolpert, 26 January 2017" width="1400" height="677" loading="lazy">
+      <figcaption class="mono">Fig. 2 · Same viewpoint, two dates. Eiffel Tower in 1888 (Henry Roger) and in 2017 (Nicolai Wolpert).</figcaption>
+    </figure>
+
     <div class="grid-2 media-row" data-reveal>
-      <div class="t1-gallery">
+      <div class="gallery square">
         <figure class="card-fig">
-          <img src="assets/t1-demo.webp" alt="Animated Camera T-1 interface graphic" width="422" height="422" loading="lazy">
-          <figcaption class="mono">Fig. 3 : On-device interface animation &amp; timeline scrubbing.</figcaption>
+          <img src="assets/t1-demo.webp" alt="Animated Camera T-1 interface graphic" width="360" height="360" loading="lazy">
+          <figcaption class="mono">Fig. 3 · On-device interface and year selection.</figcaption>
         </figure>
         <figure class="card-fig">
-          <img src="assets/appareil.webp" alt="The white 3D-printed Camera T-1 enclosure held in one hand" width="1400" height="1400" loading="lazy">
-          <figcaption class="mono">Fig. 4 : Custom 3D-printed enclosure with tactile rotary controls.</figcaption>
+          <img src="assets/appareil.webp" alt="The white 3D-printed Camera T-1 enclosure held in one hand" width="1000" height="1000" loading="lazy">
+          <figcaption class="mono">Fig. 4 · 3D-printed enclosure with rotary controls.</figcaption>
         </figure>
       </div>
       <div class="specs">
@@ -218,30 +220,35 @@
       </div>
     </div>
 
-    <div class="next-project-row" data-reveal>
-      <a href="#r2e" class="btn solid next-project-btn" data-snd>
-        <span>Next Project : Raw2Event</span>
+    <div class="next-row" data-reveal>
+      <a href="#r2e" class="btn solid next-btn" data-snd>
+        <span class="next-kicker">Next project</span><span>Raw2Event</span>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M8 2v10m0 0l4-4m-4 4L4 8" fill="none" stroke="currentColor" stroke-width="2"/></svg>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ============ CHAPTER 02 : RAW2EVENT ============ -->
+<!-- ============ CHAPTER 02 · RAW2EVENT ============ -->
 <section id="r2e" class="chapter">
   <div class="wrap">
     <div class="chapter-head" data-reveal>
-      <span class="mono kicker">Chapter 02 : Neuromorphic Vision</span>
+      <span class="mono kicker">Chapter 02 · Reproduction of a research paper</span>
       <h2 class="display h1">Raw2Event</h2>
-      <p class="sub">Real-time neuromorphic event camera conversion on Raspberry Pi 5 using raw sensor frames and ISP bypass.</p>
+      <p class="sub">My reproduction, on a Raspberry Pi Zero, of a paper that turns a standard camera into an event camera.</p>
     </div>
 
     <dl class="meta-strip mono" data-reveal>
-      <div><dt>Type</dt><dd>Applied Research · Computer Vision</dd></div>
-      <div><dt>Author</dt><dd>Oscar Caux</dd></div>
+      <div><dt>Type</dt><dd>Reproduction · Computer vision</dd></div>
+      <div><dt>Original paper</dt><dd>Ning, Lin, Iyengar, Vandewalle · KU Leuven</dd></div>
       <div><dt>Year</dt><dd>2025</dd></div>
       <div><dt>Status</dt><dd><span class="pill pill-off">Working prototype</span></dd></div>
     </dl>
+
+    <div class="callout" data-reveal>
+      <div class="callout-badge mono"><span class="dot off"></span> Reproduction · not my own research</div>
+      <p>Raw2Event is a research paper by Z. Ning, E. Lin, S. R. Iyengar and P. Vandewalle (KU Leuven). I did not invent the method. I reproduced it on a <strong>Raspberry Pi Zero</strong> with a Camera Module 3, and I built the interactive simulation below to show why event cameras matter.</p>
+    </div>
 
     <div class="stats" data-reveal>
       <div class="stat"><span class="mono kicker">Commercial event camera</span><b class="display strike"><span data-count="4000">4000</span> €+</b></div>
@@ -254,9 +261,9 @@
     <div class="lab-demo road-demo" data-reveal id="road-demo">
       <div class="demo-top">
         <div>
-          <span class="mono kicker">Interactive Simulation : Obstacle Detection Delay</span>
-          <h3 class="display h3">Why event cameras save lives : Instant reaction</h3>
-          <p class="demo-copy">Two identical vehicles traveling side by side with identical braking systems. A child steps out from behind a parked van. Notice how much earlier the event camera detects the motion :</p>
+          <span class="mono kicker">Interactive simulation · Detection delay · built for this page</span>
+          <h3 class="display h3">The event camera detects the child first</h3>
+          <p class="demo-copy">Two identical cars, same speed, same brakes. A child steps out from behind a parked van. Only the sensor differs: the event camera reacts to the first pixel that changes, while the frame camera has to wait for its next frames.</p>
         </div>
         <div class="road-actions mono">
           <div class="seg" role="radiogroup" aria-label="Car speed">
@@ -272,123 +279,143 @@
         </div>
       </div>
 
-      <!-- Verdict Banner highlighting the difference -->
-      <div class="detection-banner mono">
-        <div class="det-item event-lead">
-          <span class="dot on"></span>
-          <div><b>Event Camera :</b> Instant trigger (+10 ms) · Asynchronous pixel change detection avoids collision</div>
+      <!-- live scoreboard: who detects the child, and when -->
+      <div class="stats road-score" aria-live="polite">
+        <div class="stat"><span class="mono kicker"><i class="sw event"></i>Event camera detects at</span><b class="display accent" data-score="event">…</b><span class="mono muted small">first pixel change</span></div>
+        <div class="stat"><span class="mono kicker"><i class="sw frame"></i>Frame camera detects at</span><b class="display late" data-score="frame">…</b><span class="mono muted small">next capture, 2 sharp frames, inference</span></div>
+        <div class="stat"><span class="mono kicker">Event camera lead</span><b class="display" data-score="lead">…</b><span class="mono muted small" data-score="lead-m">distance driven before the frame camera reacts</span></div>
+      </div>
+
+      <div class="road-transport mono">
+        <button class="btn" id="road-pause" aria-pressed="false" data-snd>Pause</button>
+        <div class="seg" role="radiogroup" aria-label="Playback speed">
+          <button data-rate="0.1" data-snd>0.1×</button>
+          <button data-rate="0.3" aria-selected="true" data-snd>0.3×</button>
+          <button data-rate="1" data-snd>1×</button>
         </div>
-        <div class="det-item frame-lag">
-          <span class="dot off"></span>
-          <div><b>Standard Frame Camera :</b> Heavy delay (+100 ms to +160 ms) · Waiting for next frame capture &amp; readout</div>
-        </div>
+        <input type="range" id="road-scrub" min="0" max="1000" value="0" aria-label="Time in the scenario">
+        <span class="road-clock" id="road-clock" aria-live="off">…</span>
       </div>
 
       <div class="road-lanes">
-        <div class="road-lane" data-lane="frame">
-          <div class="lane-head mono">
-            <span><i class="sw frame"></i>Standard frame camera · <b class="fps-v">30</b> fps</span>
-            <span class="lane-det-badge" data-det-badge>Waiting for obstacle...</span>
-            <span class="lane-result" data-result>...</span>
-          </div>
-          <canvas class="road-cv" aria-label="Top-down view: car with frame-based camera approaching a child crossing"></canvas>
-          <div class="lane-tl mono" data-tl></div>
-        </div>
         <div class="road-lane" data-lane="event">
           <div class="lane-head mono">
-            <span><i class="sw event"></i>Neuromorphic event camera · async microsecond events</span>
-            <span class="lane-det-badge good" data-det-badge>Waiting for obstacle...</span>
-            <span class="lane-result" data-result>...</span>
+            <span><i class="sw event"></i>Event camera · asynchronous pixel events</span>
+            <span class="lane-result" data-result>…</span>
           </div>
           <canvas class="road-cv" aria-label="Top-down view: car with event camera approaching a child crossing"></canvas>
           <div class="lane-tl mono" data-tl></div>
         </div>
+        <div class="road-lane" data-lane="frame">
+          <div class="lane-head mono">
+            <span><i class="sw frame"></i>Frame camera · <b class="fps-v">30</b> fps</span>
+            <span class="lane-result" data-result>…</span>
+          </div>
+          <canvas class="road-cv" aria-label="Top-down view: car with frame-based camera approaching a child crossing"></canvas>
+          <div class="lane-tl mono" data-tl></div>
+        </div>
       </div>
 
-      <div class="road-verdict-summary" id="road-verdict-summary" aria-live="polite"></div>
+      <div class="road-verdict" id="road-verdict" aria-live="polite"></div>
 
-      <p class="mono muted small road-note">Illustrative model, shown at 0.3× speed. Obstacle appears 15 m ahead · frame path: next capture + 2 sharp frames + 50 ms inference · event path: ≈10 ms · then 100 ms actuation and 7.5 m/s² braking for both. Frame timing is randomized on each replay.</p>
+      <p class="mono muted small road-note">Illustrative model. Drag the time bar to step through it. The child appears 15 m ahead · frame path: next capture + 2 sharp frames + 50 ms inference · event path: ≈10 ms · then 100 ms actuation and 7.5 m/s² braking for both. Frame timing is randomized on each replay.</p>
 
       <div class="ref-video">
-        <a class="yt small-yt" href="https://www.youtube.com/watch?v=cIrf4mpPXOw" target="_blank" rel="noopener" data-id="cIrf4mpPXOw" data-title="Rocket launch from a Neuromorphic Camera : Events vs. Frames" data-snd aria-label="Play the video “Rocket launch from a Neuromorphic Camera : Events vs. Frames”">
+        <a class="yt small-yt" href="https://www.youtube.com/watch?v=cIrf4mpPXOw" target="_blank" rel="noopener" data-id="cIrf4mpPXOw" data-title="Rocket launch from a Neuromorphic Camera: Events vs. Frames" data-snd aria-label="Play the video “Rocket launch from a Neuromorphic Camera: Events vs. Frames”">
           <img src="https://i.ytimg.com/vi/cIrf4mpPXOw/hqdefault.jpg" alt="" loading="lazy">
           <span class="play"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
         </a>
         <div>
-          <span class="mono kicker">In the real world</span>
+          <span class="mono kicker">Real footage</span>
           <p>The same rocket launch recorded by a frame camera and by an event camera, side by side.</p>
-          <p class="mono muted small">Video : International Centre for Neuromorphic Systems, Western Sydney University.</p>
+          <p class="mono muted small">Video · International Centre for Neuromorphic Systems, Western Sydney University.</p>
         </div>
       </div>
     </div>
 
     <div class="grid-2 prose-row">
       <div data-reveal>
-        <h3 class="mono kicker">The idea</h3>
-        <p class="lead">Event cameras capture independent, asynchronous pixel changes with microsecond timestamps : no motion blur, no redundant frames.</p>
-        <p>They matter for medtech, autonomous driving, drones and AR/VR. But commercial sensors remain expensive, low-resolution and lack autofocus. Raw2Event reads <b>raw Bayer frames</b> straight from a Raspberry Pi Camera Module 3, <b>bypasses the ISP</b>, and converts them to events with the DVS-Voltmeter model, implemented in vectorized NumPy so it runs directly on the Pi.</p>
+        <h3 class="mono kicker">The problem</h3>
+        <p class="lead">Event cameras record independent pixel changes with microsecond timestamps, so there is no motion blur and no redundant frame. Commercial sensors remain expensive, low resolution and without autofocus.</p>
+        <p>The paper reads <b>raw Bayer frames</b> straight from a Raspberry Pi Camera Module 3, <b>bypasses the ISP</b>, and converts them to events with the DVS-Voltmeter model, implemented in vectorized NumPy so it runs directly on the Pi. I reproduced this pipeline on a Raspberry Pi Zero.</p>
       </div>
       <div data-reveal style="--d:.1s">
         <h3 class="mono kicker">The output</h3>
-        <p class="lead">Space-time cubes in <code>.aedat4</code> format : every event is stored as <code>e = (x, y, t, p)</code>.</p>
-        <p>Lightweight, microsecond-precise and without temporal redundancy. The code is open source and the noise and contrast thresholds are fully configurable, offering an accessible entry point into neuromorphic vision research.</p>
+        <p class="lead">Space-time cubes in <code>.aedat4</code> format, where every event is stored as <code>e = (x, y, t, p)</code>.</p>
+        <p>The original code is open source and the noise and contrast thresholds are configurable, which makes it a low-cost entry point into neuromorphic vision research for medtech, autonomous driving, drones and AR/VR.</p>
       </div>
     </div>
 
     <div class="pipe-block" data-reveal>
-      <span class="mono kicker">Pipeline : Frame to event stream</span>
+      <span class="mono kicker">The paper’s pipeline · In plain words</span>
+      <p class="pipe-intro">A normal camera sends whole pictures at fixed times. An event camera sends no pictures: each pixel watches its own brightness and speaks up only when it changes. Raw2Event imitates that in software, starting from the raw frames of an ordinary camera.</p>
       <div class="pipe">
-        <div class="node"><span class="mono n">01</span><b>Raw Bayer</b><span>RPi Cam 3 · IMX708 sensor</span></div>
+        <div class="node"><span class="mono n">01</span><b>Raw frames</b><span>The sensor’s untouched measurements, read before any image processing</span></div>
         <div class="wire"><i></i></div>
-        <div class="node struck"><span class="mono n">02</span><b>ISP</b><span>Bypassed : no tone map, no denoise lag</span></div>
+        <div class="node struck"><span class="mono n">02</span><b>ISP</b><span>Skipped. This image processor would smooth away the small brightness changes we need</span></div>
         <div class="wire"><i></i></div>
-        <div class="node"><span class="mono n">03</span><b>DVS-Voltmeter</b><span>NumPy model running on Raspberry Pi 5</span></div>
+        <div class="node"><span class="mono n">03</span><b>DVS-Voltmeter</b><span>Decides, pixel by pixel, when a real event camera would have fired. See the demo below</span></div>
         <div class="wire"><i></i></div>
-        <div class="node accent"><span class="mono n">04</span><b>.aedat4</b><span>(x, y, t, p) event stream</span></div>
+        <div class="node accent"><span class="mono n">04</span><b>Events</b><span>A list of events, each with a position, a time and a sign: (x, y, t, p), saved as .aedat4</span></div>
       </div>
     </div>
 
-    <div class="r2e-gallery" data-reveal>
-      <figure class="card-fig">
-        <img src="assets/raw2event.webp" alt="Test rig: a DAVIS346 event camera in a 3D-printed mount above a Raspberry Pi Camera Module 3" width="958" height="788" loading="lazy">
-        <figcaption class="mono">Fig. 5 : Calibration rig : DAVIS346 reference camera positioned above Raspberry Pi Cam Module 3.</figcaption>
-      </figure>
-      <figure class="card-fig">
-        <img src="assets/pi-zero-setup.webp" alt="Raspberry Pi Zero connected to a Raspberry Pi Camera Module 3 by a ribbon cable" width="760" height="730" loading="lazy">
-        <figcaption class="mono">Fig. 6 : Embedded setup : Raspberry Pi Zero connected to Camera Module 3.</figcaption>
-      </figure>
+    <div class="lab-demo px-demo" data-reveal id="pixel-demo">
+      <div class="demo-top">
+        <div>
+          <span class="mono kicker">Step 03 up close · One pixel · built for this page</span>
+          <h3 class="display h3">When does a pixel fire an event?</h3>
+          <p class="demo-copy">The curve is the brightness of one pixel, sampled at every camera frame. The pixel remembers the level of its last event. When the brightness moves further than the threshold away from that memory, it fires an event and updates its memory. Lower the threshold and even small flicker fires events.</p>
+        </div>
+        <label class="px-range mono">Threshold <input type="range" id="px-c" min="1" max="8" value="3" aria-describedby="px-c-v"> <b id="px-c-v">0.15</b></label>
+      </div>
+      <canvas class="px-cv" id="px-cv" aria-label="Brightness of one pixel over time, its memory level, the threshold band and the ON and OFF events it fires"></canvas>
+      <div class="steps3">
+        <div class="node"><span class="mono n">01</span><b>Remember</b><span>The pixel keeps the brightness of its last event.</span></div>
+        <div class="node"><span class="mono n">02</span><b>Compare</b><span>At each new frame, the new brightness is compared with that memory.</span></div>
+        <div class="node"><span class="mono n">03</span><b>Fire</b><span>A change bigger than the threshold writes an ON (brighter) or OFF (darker) event with its time, then the memory moves.</span></div>
+      </div>
     </div>
 
-    <div class="r2e-media-row" data-reveal>
-      <div class="video">
-        <a class="yt" href="https://www.youtube.com/watch?v=aEC-xKLxYVY" target="_blank" rel="noopener" data-id="aEC-xKLxYVY" data-title="Ma vision neuromorphique : Oscar Caux" data-snd aria-label="Play the video “Ma vision neuromorphique”">
+    <figure class="card-fig wide" data-reveal>
+      <img src="assets/space_time_cube.webp" alt="Space-time cube of an .aedat4 recording, followed by seven 30 ms time slices showing red ON and blue OFF events" width="1800" height="1012" loading="lazy">
+      <figcaption class="mono">Fig. 5 · From the paper. Space-time cube of an .aedat4 recording, sliced into 30 ms windows. Red: ON events · Blue: OFF events.</figcaption>
+    </figure>
+
+    <div class="grid-2 media-row" data-reveal>
+      <div class="gallery">
+        <figure class="card-fig">
+          <img src="assets/raw2event.webp" alt="Test rig: a DAVIS346 event camera in a 3D-printed mount above a Raspberry Pi Camera Module 3" width="958" height="788" loading="lazy">
+          <figcaption class="mono">Fig. 6 · From the paper. Calibration rig, with the DAVIS346 reference camera above the Camera Module 3.</figcaption>
+        </figure>
+        <figure class="card-fig">
+          <img src="assets/pi-zero-setup.webp" alt="Raspberry Pi Zero connected to a Raspberry Pi Camera Module 3 by a ribbon cable" width="760" height="730" loading="lazy">
+          <figcaption class="mono">Fig. 7 · My setup. Raspberry Pi Zero and Camera Module 3.</figcaption>
+        </figure>
+        <a class="yt span-2" href="https://www.youtube.com/watch?v=aEC-xKLxYVY" target="_blank" rel="noopener" data-id="aEC-xKLxYVY" data-title="Ma vision neuromorphique, Oscar Caux" data-snd aria-label="Play the video “Ma vision neuromorphique”">
           <img src="https://i.ytimg.com/vi/aEC-xKLxYVY/hqdefault.jpg" alt="" loading="lazy">
           <span class="play"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
-          <span class="mono yt-label">“Ma vision neuromorphique” : Video demonstration</span>
+          <span class="mono yt-label">Video demonstration · “Ma vision neuromorphique”</span>
         </a>
       </div>
-      <div class="specs compact">
+      <div class="specs">
         <span class="mono kicker">Specifications</span>
         <table>
-          <tr><th>Platform</th><td>Raspberry Pi 5 / Pi Zero</td></tr>
+          <tr><th>Platform</th><td>Raspberry Pi Zero</td></tr>
+          <tr><th>My part</th><td>Reproduction on the Pi Zero · interactive simulation on this page</td></tr>
           <tr><th>Sensor</th><td>RPi Camera Module 3 (IMX708)</td></tr>
           <tr><th>Model</th><td>DVS-Voltmeter · ISP bypass</td></tr>
+          <tr><th>Software</th><td>Python · vectorized NumPy</td></tr>
           <tr><th>Output</th><td>.aedat4 space-time cube (x, y, t, p)</td></tr>
+          <tr><th>Reference</th><td>Z. Ning, E. Lin, S. R. Iyengar, P. Vandewalle, “Raw2Event: Converting Raw Frame Camera into Event Camera”, KU Leuven</td></tr>
         </table>
         <a class="btn" href="https://www.youtube.com/watch?v=aEC-xKLxYVY" target="_blank" rel="noopener" data-snd>Watch on YouTube <span aria-hidden="true">↗</span></a>
       </div>
     </div>
 
-    <figure class="card-fig wide" data-reveal>
-      <img src="assets/space_time_cube.webp" alt="Space-time cube of an .aedat4 recording, followed by seven 30 ms time slices showing red ON and blue OFF events" width="2400" height="1350" loading="lazy">
-      <figcaption class="mono">Fig. 7 : Space-time cube of .aedat4 recording sliced into 30 ms windows. Red : ON events · Blue : OFF events.</figcaption>
-    </figure>
-
-    <p class="mono muted small ref">Reference : Z. Ning, E. Lin, S. R. Iyengar, P. Vandewalle, “Raw2Event: Converting Raw Frame Camera into Event Camera”, KU Leuven.</p>
-
-    <div class="next-project-row" data-reveal>
-      <a href="#lab" class="btn solid next-project-btn" data-snd>
-        <span>Next Section : In-Browser Lab Experiments</span>
+    <div class="next-row" data-reveal>
+      <a href="#lab" class="btn solid next-btn" data-snd>
+        <span class="next-kicker">Next section</span><span>In-browser prototypes</span>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M8 2v10m0 0l4-4m-4 4L4 8" fill="none" stroke="currentColor" stroke-width="2"/></svg>
       </a>
     </div>
@@ -408,7 +435,7 @@
       <div class="lab-img"><img src="assets/mnist_img.webp" alt="TinyGrad MNIST interface recognising a hand-drawn 7 with 100% confidence in 8.8 ms" width="1400" height="996" loading="lazy"></div>
       <div class="lab-body">
         <span class="mono n">03</span>
-        <h3>TinyGrad MNIST Classifier</h3>
+        <h3>TinyGrad MNIST classifier</h3>
         <p>End-to-end deep learning pipeline in TinyGrad (MLP &amp; CNN), deployed with WebGPU for real-time inference as you draw.</p>
         <ul class="chips mono"><li>TinyGrad</li><li>WebGPU</li><li>CNN</li></ul>
         <div class="links">
@@ -422,8 +449,8 @@
       <div class="lab-img"><img src="assets/synapse.webp" alt="Synapse interface: local RAG chat summarising a PDF, with model settings panel" width="1600" height="886" loading="lazy"></div>
       <div class="lab-body">
         <span class="mono n">04</span>
-        <h3>Synapse : Browser-Native RAG</h3>
-        <p>Privacy-first retrieval-augmented generation : drop PDFs, build a vector index and ask questions entirely client-side, with zero server telemetry.</p>
+        <h3>Synapse · Browser-native RAG</h3>
+        <p>Privacy-first retrieval-augmented generation: drop PDFs, build a vector index and ask questions entirely client-side, with zero server telemetry.</p>
         <ul class="chips mono"><li>RAG</li><li>Local LLM</li><li>Vector search</li></ul>
         <div class="links">
           <a href="https://oscarcaux7.github.io/Browser-Native-Multi-Document-RAG-Engine-for-Systematic-Review/" target="_blank" rel="noopener" class="btn solid" data-snd>Live demo ↗</a>
@@ -436,8 +463,8 @@
       <div class="lab-img"><img src="assets/scene2.webp" alt="WebGPU ray-marching scene editor with blended SDF sphere, box, torus and pyramid" width="1600" height="889" loading="lazy"></div>
       <div class="lab-body">
         <span class="mono n">05</span>
-        <h3>WebGPU Ray-Marching Editor</h3>
-        <p>Interactive 3D editor built on signed distance fields : add, blend and move primitives with real-time dynamic lighting.</p>
+        <h3>WebGPU ray-marching editor</h3>
+        <p>Interactive 3D editor built on signed distance fields: add, blend and move primitives with real-time dynamic lighting.</p>
         <ul class="chips mono"><li>WebGPU</li><li>SDF</li><li>Ray-marching</li></ul>
         <div class="links">
           <a href="https://oscarcaux7.github.io/WebGPU-Project-Interactive-Ray-Marching-Scene-Editor/" target="_blank" rel="noopener" class="btn solid" data-snd>Live demo ↗</a>
@@ -452,14 +479,14 @@
 <section id="about" class="section wrap">
   <div class="section-head">
     <span class="mono kicker">About</span>
-    <h2 class="display h2">Creative Technologist &amp; Embedded Systems Engineer</h2>
-    <a class="btn" href="assets/Oscar_Caux_Resume.pdf" target="_blank" rel="noopener" data-snd>Download Resume (PDF) ↓</a>
+    <h2 class="display h2">Profile</h2>
+    <a class="btn" href="assets/Oscar_Caux_Resume.pdf" target="_blank" rel="noopener" data-snd>Download resume (PDF) ↓</a>
   </div>
 
   <div class="about">
     <div class="about-intro" data-reveal>
-      <p class="lead">Master's student at ESILV and the Institute for Future Technologies, in the Creative Technology / AI &amp; Computer Graphics track. I build things end to end : PCB, enclosure, firmware, interface; specializing in computer vision, embedded electronics and robotics.</p>
-      <p>Studied engineering and startup management at Hanyang University in Seoul. Outside the lab: MMA, boxing, competitive rugby, tennis and triathlon, plus video games, cinema, biotech and design.</p>
+      <p class="lead">Master's student at ESILV and the Institute for Future Technologies, in the Creative Technology / AI &amp; Computer Graphics track. I build things end to end, from PCB and enclosure to firmware and interface, with a focus on computer vision, embedded electronics and robotics.</p>
+      <p>Studied engineering and startup management at Hanyang University in Seoul. Outside the lab, I practise MMA, boxing, competitive rugby, tennis and triathlon, plus video games, cinema, biotech and design.</p>
     </div>
 
     <div class="cv" data-reveal style="--d:.08s">
@@ -490,7 +517,7 @@
         </ul>
       </div>
       <div class="cv-block">
-        <h3 class="mono kicker">Engineering &amp; Professional Experience</h3>
+        <h3 class="mono kicker">Experience</h3>
         <ul class="rows">
           <li>
             <span class="mono y">2026</span>
@@ -533,7 +560,8 @@
 <footer id="contact" class="contact">
   <div class="wrap">
     <span class="mono kicker">Contact</span>
-    <p class="display contact-line">Contact &amp; Collaborations</p>
+    <p class="display contact-line">Open to a 5th-year internship</p>
+    <p class="contact-sub">AI, embedded systems and computer vision.</p>
     <button class="email display" id="email" data-email="oscarcaux7@gmail.com" data-snd>
       oscarcaux7@gmail.com
       <span class="mono copy-hint">Click to copy</span>
@@ -547,7 +575,7 @@
     </div>
     <div class="foot mono">
       <span>© 2026 Oscar Caux</span>
-      <span>Hand-built · simulated events live in browser</span>
+      <span>HTML · CSS · vanilla JavaScript</span>
       <a href="#top" data-snd>Back to top ↑</a>
     </div>
   </div>
@@ -556,7 +584,7 @@
 <!-- Floating Next Navigation -->
 <nav class="floating-nav" id="floating-nav" aria-label="Jump to next section">
   <button class="floating-next-btn" id="floating-next-btn" data-snd title="Go to next section">
-    <span class="floating-text">Next : <strong id="floating-next-label">Camera T-1</strong></span>
+    <span class="floating-text"><span class="next-kicker">Next</span><strong id="floating-next-label">Camera T-1</strong></span>
     <span class="floating-icon" aria-hidden="true">
       <svg viewBox="0 0 16 16" width="14" height="14"><path d="M8 2v10m0 0l4-4m-4 4L4 8" fill="none" stroke="currentColor" stroke-width="2"/></svg>
     </span>
@@ -566,6 +594,6 @@
 </main>
 
 <div class="toast mono" id="toast" role="status"></div>
-<script src="main.js"></script>
+<script src="main.js?v=6"></script>
 </body>
 </html>
