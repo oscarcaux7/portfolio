@@ -193,6 +193,8 @@ a.chip { text-decoration: none; }
 .callout-badge { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--on); display: inline-flex; align-items: center; gap: 8px; }
 .callout p { margin: 0; font-size: 15px; color: var(--ink); line-height: 1.5; max-width: 90ch; }
 .callout strong { font-weight: 500; }
+.callout .paper-title { font-family: var(--serif); font-size: clamp(20px, 2vw, 26px); line-height: 1.2; margin: 2px 0 4px; }
+.callout-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 
 .bleed { margin: 0; }
 .bleed .parallax { overflow: hidden; height: min(82vh, 62vw); min-height: 300px; }
