@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 
@@ -82,7 +82,7 @@
   <div class="section-head">
     <span class="mono kicker">Index</span>
     <h2 class="display h2">Selected work</h2>
-    <span class="mono muted">05 projects · 2024 / 2025</span>
+    <span class="mono muted">07 projects · 2024 / 2026</span>
   </div>
 
   <ol class="index" id="index">
@@ -102,8 +102,16 @@
       <span class="i-stack mono">Raspberry Pi Zero · DVS-Voltmeter</span>
       <span class="i-badge mono ghost">Reproduction</span>
     </a></li>
-    <li><a href="#lab-mnist" data-snd data-preview="assets/mnist_img.webp">
+    <li><a href="#lab-music" data-snd data-preview="assets/music-map-poster.webp">
       <span class="i-num mono">03</span>
+      <span class="i-thumb"><img src="assets/music-map-poster.webp" alt="Music map preview" loading="lazy"></span>
+      <span class="i-title">The map of my plays <em>my listening, as a spiral</em></span>
+      <span class="i-tag mono">Data viz · Live</span>
+      <span class="i-stack mono">Canvas 2D · Python · Docker</span>
+      <span class="i-badge mono">Featured</span>
+    </a></li>
+    <li><a href="#lab-mnist" data-snd data-preview="assets/mnist_img.webp">
+      <span class="i-num mono">04</span>
       <span class="i-thumb"><img src="assets/mnist_img.webp" alt="TinyGrad MNIST preview" loading="lazy"></span>
       <span class="i-title">TinyGrad MNIST <em>in-browser inference</em></span>
       <span class="i-tag mono">Lab · ML</span>
@@ -111,7 +119,7 @@
       <span class="i-badge mono ghost">Live demo</span>
     </a></li>
     <li><a href="#lab-rag" data-snd data-preview="assets/synapse.webp">
-      <span class="i-num mono">04</span>
+      <span class="i-num mono">05</span>
       <span class="i-thumb"><img src="assets/synapse.webp" alt="Synapse preview" loading="lazy"></span>
       <span class="i-title">Synapse <em>browser-native RAG engine</em></span>
       <span class="i-tag mono">Lab · AI</span>
@@ -119,11 +127,19 @@
       <span class="i-badge mono ghost">Live demo</span>
     </a></li>
     <li><a href="#lab-ray" data-snd data-preview="assets/scene2.webp">
-      <span class="i-num mono">05</span>
+      <span class="i-num mono">06</span>
       <span class="i-thumb"><img src="assets/scene2.webp" alt="Ray-marching editor preview" loading="lazy"></span>
       <span class="i-title">Ray-marching editor <em>SDF scenes on the GPU</em></span>
       <span class="i-tag mono">Lab · Graphics</span>
       <span class="i-stack mono">WebGPU · WGSL · SDF</span>
+      <span class="i-badge mono ghost">Live demo</span>
+    </a></li>
+    <li><a href="#lab-ift" data-snd data-preview="assets/ift-order.webp">
+      <span class="i-num mono">07</span>
+      <span class="i-thumb"><img src="assets/ift-order.webp" alt="IFT Order preview" loading="lazy"></span>
+      <span class="i-title">IFT Order <em>lab purchasing app</em></span>
+      <span class="i-tag mono">Web app · IFT</span>
+      <span class="i-stack mono">Vue 3 · Pinia · Firebase</span>
       <span class="i-badge mono ghost">Live demo</span>
     </a></li>
   </ol>
@@ -430,14 +446,37 @@
   <div class="section-head">
     <span class="mono kicker">Lab</span>
     <h2 class="display h2">In-browser prototypes</h2>
-    <span class="mono muted">AI &amp; Computer Graphics · IFT 2025</span>
+    <span class="mono muted">AI, graphics, data viz &amp; tools · 2025 / 2026</span>
   </div>
 
-  <div class="lab-grid">
-    <article class="lab-card" id="lab-mnist" data-reveal>
-      <div class="lab-img"><img src="assets/mnist_img.webp" alt="TinyGrad MNIST interface recognising a hand-drawn 7 with 100% confidence in 8.8 ms" width="1400" height="996" loading="lazy"></div>
+  <div class="lab-carousel" data-reveal>
+    <div class="lab-nav mono">
+      <span class="lab-count" id="lab-count" aria-live="polite"></span>
+      <button class="chip lab-arrow" data-dir="-1" aria-label="Previous prototypes" data-snd>←</button>
+      <button class="chip lab-arrow" data-dir="1" aria-label="Next prototypes" data-snd>→</button>
+    </div>
+    <div class="lab-track" id="lab-track" tabindex="0" role="region" aria-label="In-browser prototypes, scroll sideways">
+    <article class="lab-card" id="lab-music">
+      <div class="lab-img lab-video">
+        <video src="assets/music-map.mp4?v=2" poster="assets/music-map-poster.webp" muted loop playsinline preload="metadata" data-autoplay
+          aria-label="The map of my plays turning: a green spiral of album covers joined by grey threads, then a network sphere of styles and artists"></video>
+        <span class="lab-flag mono">Featured</span>
+      </div>
       <div class="lab-body">
         <span class="mono n">03</span>
+        <h3>The map of my plays · Data viz</h3>
+        <p>My Last.fm listening drawn live: a spiral of time where each play is its album cover, and a network sphere of styles and artists. The 3D is drawn by hand on a 2D canvas, with no 3D library.</p>
+        <ul class="chips mono"><li>Canvas 2D</li><li>Last.fm API</li><li>Python</li></ul>
+        <div class="links">
+          <a href="https://student02.wt.thomasjuldo.com/" target="_blank" rel="noopener" class="btn solid" data-snd>Open live ↗</a>
+          <a href="https://github.com/oscarcaux7/music-map" target="_blank" rel="noopener" class="btn" data-snd>Code</a>
+        </div>
+      </div>
+    </article>
+    <article class="lab-card" id="lab-mnist">
+      <div class="lab-img"><img src="assets/mnist_img.webp" alt="TinyGrad MNIST interface recognising a hand-drawn 7 with 100% confidence in 8.8 ms" width="1400" height="996" loading="lazy"></div>
+      <div class="lab-body">
+        <span class="mono n">04</span>
         <h3>TinyGrad MNIST classifier</h3>
         <p>End-to-end deep learning pipeline in TinyGrad (MLP &amp; CNN), deployed with WebGPU for real-time inference as you draw.</p>
         <ul class="chips mono"><li>TinyGrad</li><li>WebGPU</li><li>CNN</li></ul>
@@ -447,11 +486,10 @@
         </div>
       </div>
     </article>
-
-    <article class="lab-card" id="lab-rag" data-reveal style="--d:.08s">
+    <article class="lab-card" id="lab-rag">
       <div class="lab-img"><img src="assets/synapse.webp" alt="Synapse interface: local RAG chat summarising a PDF, with model settings panel" width="1600" height="886" loading="lazy"></div>
       <div class="lab-body">
-        <span class="mono n">04</span>
+        <span class="mono n">05</span>
         <h3>Synapse · Browser-native RAG</h3>
         <p>Privacy-first retrieval-augmented generation: drop PDFs, build a vector index and ask questions entirely client-side, with zero server telemetry.</p>
         <ul class="chips mono"><li>RAG</li><li>Local LLM</li><li>Vector search</li></ul>
@@ -461,11 +499,10 @@
         </div>
       </div>
     </article>
-
-    <article class="lab-card" id="lab-ray" data-reveal style="--d:.16s">
+    <article class="lab-card" id="lab-ray">
       <div class="lab-img"><img src="assets/scene2.webp" alt="WebGPU ray-marching scene editor with blended SDF sphere, box, torus and pyramid" width="1600" height="889" loading="lazy"></div>
       <div class="lab-body">
-        <span class="mono n">05</span>
+        <span class="mono n">06</span>
         <h3>WebGPU ray-marching editor</h3>
         <p>Interactive 3D editor built on signed distance fields: add, blend and move primitives with real-time dynamic lighting.</p>
         <ul class="chips mono"><li>WebGPU</li><li>SDF</li><li>Ray-marching</li></ul>
@@ -475,6 +512,20 @@
         </div>
       </div>
     </article>
+    <article class="lab-card" id="lab-ift">
+      <div class="lab-img"><img src="assets/ift-order.webp" alt="IFT Order request form in demo mode: requester details, IFT project and urgency" width="1400" height="875" loading="lazy"></div>
+      <div class="lab-body">
+        <span class="mono n">07</span>
+        <h3>IFT Order · Lab purchasing app</h3>
+        <p>Web app for the Institute for Future Technologies: students request components with supplier links and get a tracking code; lab managers approve, order and export to CSV. Real-time Firestore on the free Firebase tier.</p>
+        <ul class="chips mono"><li>Vue 3</li><li>Pinia</li><li>Firebase</li></ul>
+        <div class="links">
+          <a href="https://oscarcaux7.github.io/ift-order/" target="_blank" rel="noopener" class="btn solid" data-snd>Live demo ↗</a>
+          <a href="https://github.com/oscarcaux7/ift-order" target="_blank" rel="noopener" class="btn" data-snd>Code</a>
+        </div>
+      </div>
+    </article>
+    </div>
   </div>
 </section>
 
@@ -597,6 +648,6 @@
 </main>
 
 <div class="toast mono" id="toast" role="status"></div>
-<script src="main.js?v=20"></script>
+<script src="main.js?v=23"></script>
 </body>
 </html>

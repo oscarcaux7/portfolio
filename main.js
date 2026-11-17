@@ -820,6 +820,9 @@
     }
 
     async function start() {
+      // no WebGL: leave the space empty and skip the three.js download
+      const probe = document.createElement('canvas');
+      if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) { box.remove(); return; }
       let THREE;
       try { THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js'); }
       catch (e) { box.remove(); return; } // no model beats a broken box
@@ -885,6 +888,37 @@
       });
     }
   })();
+
+
+
+  /* ---------- Lab carousel: arrows, counter, ends ---------- */
+  (function labCarousel() {
+    const track = $('#lab-track'); if (!track) return;
+    const cards = $$('.lab-card', track), count = $('#lab-count'), [prev, next] = $$('.lab-nav [data-dir]');
+    const step = () => (cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth);
+    [prev, next].forEach(b => b.addEventListener('click', () => {
+      track.scrollBy({ left: +b.dataset.dir * step(), behavior: reduced ? 'auto' : 'smooth' });
+    }));
+    function sync() {
+      const s = step(), first = Math.round(track.scrollLeft / s), shown = Math.max(1, Math.round(track.clientWidth / s));
+      const last = Math.min(cards.length, first + shown);
+      count.textContent = `${first + 1}${last > first + 1 ? '–' + last : ''} / ${cards.length}`;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+    }
+    track.addEventListener('scroll', sync, { passive: true });
+    addEventListener('resize', sync);
+    sync();
+  })();
+
+  /* ---------- Featured video: plays only while on screen, never with reduced motion ---------- */
+  $$('video[data-autoplay]').forEach(v => {
+    if (reduced) { v.controls = true; return; }
+    new IntersectionObserver(([en]) => {
+      if (en.isIntersecting) v.play().catch(() => { v.controls = true; }); // autoplay blocked: let the visitor start it
+      else v.pause();
+    }, { threshold: 0.25 }).observe(v);
+  });
 
   /* ---------- Resize ---------- */
   let rz;

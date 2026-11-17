@@ -8,9 +8,11 @@ Live site: [oscarcaux7.github.io/portfolio](https://oscarcaux7.github.io/portfol
 
 * **Camera T-1**: a handheld camera that retrieves archival photographs of the exact place where you stand. Paper published in the Extended Abstracts of ACM CHI 2026 ([PDF](assets/Camera-T1_CHI-EA-2026.pdf), [DOI](https://doi.org/10.1145/3772363.3799317)). [Source](https://github.com/oscarcaux7/Camera_T-1_OS)
 * **Raw2Event**: my reproduction, on a Raspberry Pi Zero, of the KU Leuven paper by Z. Ning, E. Lin, S. R. Iyengar and P. Vandewalle that converts a raw frame camera into an event camera. The page adds an interactive simulation of detection delay and a one-pixel explainer, both built for this site.
+* **The map of my plays** (featured): my Last.fm listening as a spiral of time and a network sphere, drawn by hand on a 2D canvas; Python server, Docker Compose. [Live](https://student02.wt.thomasjuldo.com/) · [Code](https://github.com/oscarcaux7/music-map)
 * **TinyGrad MNIST classifier**: in-browser inference with TinyGrad and WebGPU. [Demo](https://oscarcaux7.github.io/TinyGrad-MNIST-Classifier/)
 * **Synapse**: privacy-first, browser-native RAG engine. [Demo](https://oscarcaux7.github.io/Browser-Native-Multi-Document-RAG-Engine-for-Systematic-Review/)
 * **WebGPU ray-marching editor**: interactive SDF scene editor. [Demo](https://oscarcaux7.github.io/WebGPU-Project-Interactive-Ray-Marching-Scene-Editor/)
+* **IFT Order**: lab purchasing app for the Institute for Future Technologies (Vue 3, Pinia, Firebase). [Demo](https://oscarcaux7.github.io/ift-order/) · [Code](https://github.com/oscarcaux7/ift-order)
 
 ## Structure
 
