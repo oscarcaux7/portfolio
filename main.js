@@ -646,6 +646,246 @@
     });
   })();
 
+
+  /* ---------- Camera T-1: rotating 3D model next to the title ----------
+     The case is rebuilt in code from the current CAD screenshots and drawing
+     (rounded body, grip with finger swoop, two-step lens, knurled dial, top
+     slots, back screen), in millimetres. three.js loads only when the chapter
+     gets close. */
+  (function t1Model() {
+    const box = $('#t1-model'); if (!box) return;
+    const canvas = $('canvas', box);
+    const near = new IntersectionObserver(([en]) => {
+      if (en.isIntersecting) { near.disconnect(); start(); }
+    }, { rootMargin: '600px 0px' });
+    near.observe(box);
+
+    // Smooth normals across soft curves, keep hard edges sharper than `deg` degrees.
+    function crease(THREE, geo, deg = 38) {
+      if (geo.index) geo = geo.toNonIndexed();
+      const p = geo.attributes.position.array, nc = p.length / 3, nf = nc / 3, cosC = Math.cos(deg * Math.PI / 180);
+      const fn = new Float32Array(nf * 3), fa = new Float32Array(nf), out = new Float32Array(p.length);
+      for (let f = 0; f < nf; f++) {
+        const o = f * 9;
+        const ux = p[o + 3] - p[o], uy = p[o + 4] - p[o + 1], uz = p[o + 5] - p[o + 2];
+        const vx = p[o + 6] - p[o], vy = p[o + 7] - p[o + 1], vz = p[o + 8] - p[o + 2];
+        const x = uy * vz - uz * vy, y = uz * vx - ux * vz, z = ux * vy - uy * vx, l = Math.hypot(x, y, z);
+        fa[f] = l; if (l > 0) { fn[f * 3] = x / l; fn[f * 3 + 1] = y / l; fn[f * 3 + 2] = z / l; }
+      }
+      const groups = new Map();
+      for (let c = 0; c < nc; c++) {
+        const k = `${Math.round(p[c * 3] * 1e3)},${Math.round(p[c * 3 + 1] * 1e3)},${Math.round(p[c * 3 + 2] * 1e3)}`;
+        let g = groups.get(k); if (!g) groups.set(k, g = []); g.push(c);
+      }
+      for (const g of groups.values()) for (const c of g) {
+        const f = (c / 3) | 0; let x = 0, y = 0, z = 0;
+        for (const c2 of g) {
+          const f2 = (c2 / 3) | 0;
+          if (fn[f * 3] * fn[f2 * 3] + fn[f * 3 + 1] * fn[f2 * 3 + 1] + fn[f * 3 + 2] * fn[f2 * 3 + 2] >= cosC) {
+            x += fn[f2 * 3] * fa[f2]; y += fn[f2 * 3 + 1] * fa[f2]; z += fn[f2 * 3 + 2] * fa[f2];
+          }
+        }
+        const l = Math.hypot(x, y, z) || 1; out[c * 3] = x / l; out[c * 3 + 1] = y / l; out[c * 3 + 2] = z / l;
+      }
+      geo.setAttribute('normal', new THREE.BufferAttribute(out, 3));
+      return geo;
+    }
+
+    function buildCamera(THREE) {
+      // millimetres, measured from the CAD top and side views; front faces +z, grip on the left seen from the front
+      const W = 120, H = 69, D = 26.6, GD = 41.9;   // body, and total depth at the grip
+      const zB = -D / 2, zF = D / 2, xE = -W / 2;
+      const shell = new THREE.MeshStandardMaterial({ roughness: 0.56, metalness: 0.02 });
+      const panel = new THREE.MeshStandardMaterial({ color: 0x1f1b1a, roughness: 0.42, metalness: 0.04 });
+      const hole = new THREE.MeshBasicMaterial({ color: 0x060505 });
+      const cam = new THREE.Group();
+      const add = (geo, mat, x = 0, y = 0, z = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); cam.add(m); return m; };
+      // extrude a 2D outline with a rounded bevel; `bev` is added outside the outline
+      const extrude = (shape, depth, bev, deg = 38) => {
+        const geo = new THREE.ExtrudeGeometry(shape, { depth: Math.max(0.01, depth - 2 * bev), bevelEnabled: true, bevelThickness: bev, bevelSize: bev, bevelSegments: 7, curveSegments: 18 });
+        geo.translate(0, 0, -Math.max(0.01, depth - 2 * bev) / 2);
+        return crease(THREE, geo, deg);
+      };
+      const rrect = (w, h, r) => {
+        const s = new THREE.Shape(), x = w / 2 - r, y = h / 2 - r;
+        s.absarc(x, y, r, 0, Math.PI / 2); s.absarc(-x, y, r, Math.PI / 2, Math.PI);
+        s.absarc(-x, -y, r, Math.PI, 1.5 * Math.PI); s.absarc(x, -y, r, 1.5 * Math.PI, 2 * Math.PI);
+        return s;
+      };
+
+      // body
+      add(extrude(rrect(W - 12, H - 12, 2.5), D, 6), shell);
+
+      // grip: the lobe seen from above (round outer corner, S-curve back into the body front),
+      // lofted over the height with rounded top and bottom edges, and cut back along the
+      // finger scoop so the bottom 10 mm is flush with the body, as in the side view
+      {
+        const zIn = zB + 4, tipX = xE + 17, tipZ = zB + GD, rb = 8.5, e = 0.15; // rb matches the body's corner radius // e keeps hidden faces just inside the body
+        const plan = new THREE.Path();
+        plan.moveTo(xE + 8, zIn);                                                         // hidden part, kept inside the body's rounded back edge
+        plan.quadraticCurveTo(xE + 2, zIn + 0.5, xE + e, zIn + 6);
+        plan.lineTo(xE + e, 0.5);
+        plan.bezierCurveTo(xE + e, 14, xE + 6, tipZ, tipX, tipZ);                         // outer rounded corner
+        plan.bezierCurveTo(tipX + 5.5, tipZ, tipX + 8.5, tipZ - 6, xE + 27, zF + 3.5);    // steep inner side
+        plan.bezierCurveTo(xE + 28.3, zF + 1.3, xE + 29.8, zF - 0.3, xE + 32, zF - 0.3);  // eases into the body front
+        plan.lineTo(xE + 44, zF - 0.3);
+        plan.lineTo(xE + 44, zIn); plan.lineTo(xE + 8, zIn);
+        const N = 240, ring = plan.getSpacedPoints(N).slice(0, N);                      // (x, z) around the outline
+        // outward 2D normals, to pull the outline in where the top and bottom edges round over
+        let area = 0;
+        for (let i = 0; i < N; i++) { const a = ring[i], b = ring[(i + 1) % N]; area += a.x * b.y - b.x * a.y; }
+        const sgn = area > 0 ? 1 : -1;
+        const nrm = ring.map((p, i) => {
+          const a = ring[(i + N - 1) % N], b = ring[(i + 1) % N], dx = b.x - a.x, dz = b.y - a.y, l = Math.hypot(dx, dz) || 1;
+          return [sgn * dz / l, -sgn * dx / l];
+        });
+        // rows over the height: rounded bottom, the scoop transition, straight middle, rounded top
+        const yBot = -H / 2 + e, yTop = H / 2 - e, yA = yBot + 30, yS = yBot + 10, rows = [];
+        for (let k = 0; k <= 6; k++) { const f = Math.PI / 2 * (1 - k / 6); rows.push([yBot + rb - rb * Math.sin(f), rb * (1 - Math.cos(f))]); }
+        for (let k = 1; k <= 40; k++) rows.push([yBot + rb + (yA + 4 - yBot - rb) * k / 40, 0]);
+        for (let k = 1; k <= 4; k++) rows.push([yA + 4 + (yTop - rb - yA - 4) * k / 4, 0]);
+        for (let k = 1; k <= 6; k++) { const f = Math.PI / 2 * k / 6; rows.push([yTop - rb + rb * Math.sin(f), rb * (1 - Math.cos(f))]); }
+        const front = (y) => { // how far forward the grip reaches at height y
+          const t = Math.min(1, Math.max(0, (y - yS) / (yA - yS))), s = t * t * (3 - 2 * t);
+          return zF - 7 + (tipZ - zF + 7) * s;
+        };
+        const pos = [];
+        for (const [y, off] of rows) {
+          const lim = front(y);
+          ring.forEach((p, i) => pos.push(p.x - nrm[i][0] * off, y, Math.min(p.y - nrm[i][1] * off, lim)));
+        }
+        const idx = [], R = rows.length, P = (k) => new THREE.Vector3(pos[k * 3], pos[k * 3 + 1], pos[k * 3 + 2]);
+        for (let r = 0; r < R - 1; r++) for (let i = 0; i < N; i++) {
+          const a = r * N + i, b = r * N + (i + 1) % N, c = a + N, d = b + N;
+          idx.push(a, b, d, a, d, c);
+        }
+        // walls must face outward: test the quads of a full-depth row against the row centre
+        const rr = R - 8, ctr = new THREE.Vector3();
+        for (let i = 0; i < N; i++) ctr.add(P(rr * N + i));
+        ctr.divideScalar(N);
+        let facing = 0;
+        for (let i = 0; i < N; i++) {
+          const a = P(rr * N + i), b = P(rr * N + (i + 1) % N), d = P((rr + 1) * N + (i + 1) % N);
+          facing += b.clone().sub(a).cross(d.clone().sub(a)).dot(a.clone().sub(ctr));
+        }
+        if (facing < 0) for (let i = 0; i < idx.length; i += 3) { const t = idx[i + 1]; idx[i + 1] = idx[i + 2]; idx[i + 2] = t; }
+        // caps: each triangle turned to face up (top) or down (bottom)
+        const cap = (r, up) => {
+          const pts = ring.map((_, i) => new THREE.Vector2(pos[(r * N + i) * 3], pos[(r * N + i) * 3 + 2]));
+          for (const [a, b, c] of THREE.ShapeUtils.triangulateShape(pts, [])) {
+            const A = r * N + a, B = r * N + b, C = r * N + c;
+            const ny = P(B).sub(P(A)).cross(P(C).sub(P(A))).y;
+            idx.push(...((ny > 0) === up ? [A, B, C] : [A, C, B]));
+          }
+        };
+        cap(0, false); cap(R - 1, true);
+        const g = new THREE.BufferGeometry();
+        g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+        g.setIndex(idx);
+        add(crease(THREE, g, 40), shell);
+      }
+
+      // lens: low flange blended into the body, barrel 47 mm across ending 21.5 mm out, ring line, dome button
+      {
+        const prof = [[27.5, -1], [27.5, 0.4], [27.1, 1.4], [26.3, 2.1], [25.2, 2.5], [24.2, 2.7], [23.6, 3.2], [23.4, 4],
+          [23.4, 17.3], [23.08, 18.91], [22.17, 20.27], [20.81, 21.18], [19.2, 21.5], [16.4, 21.5], [16.1, 21.25], [15.8, 21.2],
+          [6, 21.2], [5.67, 21.2], [5.02, 22.9], [4.1, 24.1], [2.9, 25.02], [1.5, 25.6], [0, 25.8]].map(([rr, z]) => new THREE.Vector2(rr, z));
+        const lens = new THREE.LatheGeometry(prof, 72);
+        lens.rotateX(Math.PI / 2);            // lathe axis y -> z (forward)
+        add(crease(THREE, lens, 30), shell, 10, 0, zF);
+      }
+
+      // knurled dial on the front part of the grip top
+      {
+        const teeth = 16, gear = new THREE.Shape();
+        for (let i = 0; i <= teeth * 2; i++) {
+          const a = i / (teeth * 2) * Math.PI * 2, rr = i % 2 ? 2.35 : 2.85;
+          if (i) gear.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); else gear.moveTo(rr, 0);
+        }
+        const dial = new THREE.ExtrudeGeometry(gear, { depth: 5.6, bevelEnabled: true, bevelThickness: 0.3, bevelSize: 0.2, bevelSegments: 2 });
+        dial.rotateX(-Math.PI / 2);
+        const x = xE + 14.7, z = zB + 29.5, y = H / 2;
+        add(crease(THREE, dial, 50), shell, x, y + 1.9, z);
+        add(crease(THREE, new THREE.CylinderGeometry(1.7, 1.7, 2, 24)), shell, x, y + 0.9, z);
+      }
+
+      // two slots on the top: one across, one running front to back next to the grip
+      add(new THREE.BoxGeometry(10.7, 0.6, 6.4), hole, xE + 47.8, H / 2 + 0.05, zB + 20.2);
+      add(new THREE.BoxGeometry(6.4, 0.6, 12.8), hole, xE + 29.5, H / 2 + 0.05, zB + 13.8);
+
+      // back: framed screen at the end away from the grip, flat space between it and the grip
+      add(new THREE.BoxGeometry(74, 51, 0.5), hole, 15, -1, zB - 0.1);        // thin dark gap around the panel
+      add(extrude(rrect(72, 49, 1.2), 1.4, 0.4, 50), panel, 15, -1, zB - 0.45);
+      return cam;
+    }
+
+    async function start() {
+      let THREE;
+      try { THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js'); }
+      catch (e) { box.remove(); return; } // no model beats a broken box
+
+      let renderer;
+      try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' }); }
+      catch (e) { box.remove(); return; } // no WebGL
+      renderer.setClearColor(0x000000, 0); // transparent: the page background shows through in both themes
+
+      const model = buildCamera(THREE), size = 130;
+      const spin = new THREE.Group(); spin.add(model);
+      const scene = new THREE.Scene(); scene.add(spin);
+      const shell = model.children[0].material;
+
+      const hemi = new THREE.HemisphereLight(0xffffff, 0x000000, 1);
+      const key = new THREE.DirectionalLight(0xffffff, 2.4); key.position.set(-1.1, 1.5, 1.5);
+      const rim = new THREE.DirectionalLight(0xffffff, 2); rim.position.set(1.6, 0.9, -1.4);
+      const top = new THREE.DirectionalLight(0xffffff, 0.8); top.position.set(0.3, 2, 0.2);
+      scene.add(hemi, key, rim, top);
+
+      const cam = new THREE.PerspectiveCamera(26, 1, size * 0.1, size * 20);
+      cam.position.set(0, size * 0.5, size * 2.45); cam.lookAt(0, size * 0.03, 0);
+
+      // the case is dark brown in the CAD render; lights adapt so it reads on both page colours
+      let themeDark = null;
+      function syncTheme() {
+        const d = isDark(); if (d === themeDark) return; themeDark = d;
+        shell.color.set(d ? '#3a3330' : '#2e2826');
+        hemi.color.set(d ? '#fff3e4' : '#ffffff'); hemi.groundColor.set(d ? '#1c1a18' : '#b8b2a6');
+        hemi.intensity = d ? 1.5 : 1.2;
+        key.intensity = d ? 2.8 : 2.4; rim.intensity = d ? 3.2 : 1.6; rim.color.set(d ? '#ffe9d2' : '#ffffff');
+      }
+
+      // slow turn, drag to spin with a little inertia; reduced motion keeps a still 3/4 view
+      let yaw = -0.6, vel = 0, drag = null; // front three-quarter view, as in the CAD render
+      canvas.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, t: performance.now() }; canvas.setPointerCapture(e.pointerId); });
+      canvas.addEventListener('pointermove', (e) => {
+        if (!drag) return;
+        const now = performance.now(), dx = e.clientX - drag.x;
+        yaw += dx * 0.012; vel = dx * 0.012 / Math.max(1, now - drag.t) * 16; drag = { x: e.clientX, t: now };
+      });
+      const release = () => { drag = null; };
+      canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release);
+
+      function resize() {
+        const w = canvas.clientWidth, h = canvas.clientHeight;
+        const dpr = Math.min(devicePixelRatio || 1, 2);
+        if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+          renderer.setPixelRatio(dpr); renderer.setSize(w, h, false);
+          cam.aspect = w / h;
+          cam.zoom = Math.min(1, cam.aspect / 1.15); // keep the whole case in view in narrow boxes
+          cam.updateProjectionMatrix();
+        }
+      }
+
+      runWhenVisible(box, (now, dt) => {
+        syncTheme(); resize();
+        if (!drag) { vel *= 0.94; yaw += vel + (reduced ? 0 : dt * 0.00035); }
+        spin.rotation.y = yaw;
+        spin.position.y = reduced ? 0 : Math.sin(now / 1600) * size * 0.012;
+        renderer.render(scene, cam);
+        if (!canvas.classList.contains('ready')) { canvas.classList.add('ready'); box.classList.add('ready'); }
+      });
+    }
+  })();
+
   /* ---------- Resize ---------- */
   let rz;
   addEventListener('resize', () => {

@@ -2,7 +2,7 @@
 
 Engineering student at ESILV × Institute for Future Technologies (IFT), looking for a 5th-year internship in AI, embedded systems and computer vision.
 
-Live site: [oscarcaux7.github.io/portfolio](https://oscarcaux7.github.io/portfolio/) · [version française](https://oscarcaux7.github.io/portfolio/fr.html)
+Live site: [oscarcaux7.github.io/portfolio](https://oscarcaux7.github.io/portfolio/)
 
 ## Projects on the site
 
@@ -16,7 +16,6 @@ Live site: [oscarcaux7.github.io/portfolio](https://oscarcaux7.github.io/portfol
 
 ```text
 index.html   English page
-fr.html      French page (same structure)
 style.css    shared styles, light and dark themes
 main.js      theme, sound, event camera simulations (hero, road scenario, one pixel)
 assets/      images and resume
